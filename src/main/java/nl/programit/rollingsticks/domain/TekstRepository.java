@@ -1,4 +1,4 @@
-package nl.rollingsticks.domain;
+package nl.programit.rollingsticks.domain;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;

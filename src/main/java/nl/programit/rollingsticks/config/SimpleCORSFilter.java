@@ -1,4 +1,4 @@
-package nl.rollingsticks.config;
+package nl.programit.rollingsticks.config;
 
 import java.io.IOException;
 

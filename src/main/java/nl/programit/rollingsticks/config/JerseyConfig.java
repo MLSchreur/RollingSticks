@@ -1,11 +1,11 @@
-package nl.rollingsticks.config;
+package nl.programit.rollingsticks.config;
 
 import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
-import nl.rollingsticks.service.TekstEndpoint;
+import nl.programit.rollingsticks.service.TekstEndpoint;
 
 @Component
 @ApplicationPath("/api")
