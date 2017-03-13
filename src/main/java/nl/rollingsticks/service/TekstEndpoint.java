@@ -1,4 +1,4 @@
-package nl.programit.rollingsticks.service;
+package nl.rollingsticks.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import nl.programit.rollingsticks.domain.Tekst;
-import nl.programit.rollingsticks.domain.TekstService;
+import nl.rollingsticks.domain.Tekst;
+import nl.rollingsticks.domain.TekstService;
 
 @Path("tekst")
 @Component

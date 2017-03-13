@@ -1,4 +1,4 @@
-package nl.programit.rollingsticks.domain;
+package nl.rollingsticks.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
