@@ -1,8 +1,10 @@
-package nl.rollingsticks.domain;
+package nl.rollingsticks.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import nl.rollingsticks.domain.Tekst;
 
 @Service
 @Transactional
@@ -19,4 +21,8 @@ public class TekstService {
 	public void save(Tekst tekst){
 		tekstRepository.save(tekst);
 	}
+
+//	public Tekst save(Tekst tekst){
+//		return tekstRepository.save(tekst);
+//	}
 }
