@@ -13,14 +13,14 @@ public class BladmuziekService {
 	@Autowired
 	private BladmuziekRepository bladmuziekRepository;
 
-//	public void save(Bladmuziek bladmuziek){
-//		bladmuziekRepository.save(bladmuziek);
-//	}
-//
-	public Bladmuziek save(Bladmuziek bladmuziek){
-		return bladmuziekRepository.save(bladmuziek);
+	public void save(Bladmuziek bladmuziek){
+		bladmuziekRepository.save(bladmuziek);
 	}
 
+//	public Bladmuziek save(Bladmuziek bladmuziek){
+//		return bladmuziekRepository.save(bladmuziek);
+//	}
+//
 	public Bladmuziek findById(Long id) {
 		return bladmuziekRepository.findOne(id);
 	}

@@ -25,8 +25,8 @@ public class TekstEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postTekst(Tekst tekst){
-		System.out.println("@POST: " + tekst.getTekst() + " - " + tekst.getId());
 		tekstService.save(tekst);
+		System.out.println("@POST: " + tekst.getTekst() + " - " + tekst.getId());
 		return Response.accepted(tekst).build();
 	}
 	
