@@ -1,4 +1,4 @@
-package nl.programit.rollingsticks;
+package nl.rollingsticks;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
