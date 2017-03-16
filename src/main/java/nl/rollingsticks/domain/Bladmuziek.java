@@ -19,10 +19,10 @@ public class Bladmuziek {
 	private String titel;
 	private String artiest;
 	private String omschrijving;
-//	private String pictogram; // later via jpeg
 	private String lesonderdeel;
-	private String mp3;
-	private String xml;
+	private String padPictogram;
+	private String padMp3;
+	private String padXml;
 	
 	public long getId() {
 		return id;
@@ -60,21 +60,28 @@ public class Bladmuziek {
 		this.lesonderdeel = lesonderdeel;
 	}
 
-	public String getMp3() {
-		return mp3;
+	public String getPadPictogram() {
+		return padPictogram;
 	}
 
-	public void setMp3(String mp3) {
-		this.mp3 = mp3;
+	public void setPadPictogram(String padPictogram) {
+		this.padPictogram = padPictogram;
 	}
 
-	public String getXml() {
-		return xml;
+	public String getPadMp3() {
+		return padMp3;
 	}
 
-	public void setXml(String xml) {
-		this.xml = xml;
+	public void setPadMp3(String padMP3) {
+		this.padMp3 = padMP3;
 	}
 
+	public String getPadXml() {
+		return padXml;
+	}
+
+	public void setPadXml(String padXML) {
+		this.padXml = padXML;
+	}
 
 }
