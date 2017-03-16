@@ -1,0 +1,49 @@
+body {
+  color: green;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+pietjepuk {
+  color: rgb(105, 77, 167);
+}
+
+p {
+  background-color: lightgoldenrodyellow;
+}
+
+#par2 {
+  background-color: lightpink;
+}
+
+h2.class1 {
+  background-color: lightskyblue;
+}
+
+label:before {
+  display: inline-block;
+  content: "\00B7";
+  font-weight: bold;
+  width: 15px;
+}
+
+label {
+  display: inline-block;
+  margin: 5px;
+  width: 100px;
+}
+
+input {
+  width: 200px;
+}
+
+div {
+  margin: 5px;
+  padding: 10px;
+  border: 2px solid darkblue;
+  border-radius: 20px 0 20px 0;
+  background-color: lightcyan;
+}
+
+body > header {
+  text-align: center;
+}
