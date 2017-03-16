@@ -37,10 +37,30 @@ public class BladmuziekEndpoint {
 
 	@POST
 	@Consumes(MediaType.TEXT_XML)
-	@Path("{id}")
+	@Path("{id}/xml")
 	public Response postXMLtoBladmuziekById(@PathParam("id") Long id, String xml) {
 		Bladmuziek bladmuziek = this.bladmuziekService.findById(id);
 		bladmuziek.setXml(xml);
+		this.bladmuziekService.save(bladmuziek);
+		return Response.accepted().build();
+	}
+
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Path("{id}/img")
+	public Response postIMGtoBladmuziekById(@PathParam("id") Long id, byte[] img) {
+		Bladmuziek bladmuziek = this.bladmuziekService.findById(id);
+		bladmuziek.setPictogram(img);
+		this.bladmuziekService.save(bladmuziek);
+		return Response.accepted().build();
+	}
+
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Path("{id}/mp3")
+	public Response postMP3toBladmuziekById(@PathParam("id") Long id, byte[] mp3) {
+		Bladmuziek bladmuziek = this.bladmuziekService.findById(id);
+		bladmuziek.setPictogram(mp3);
 		this.bladmuziekService.save(bladmuziek);
 		return Response.accepted().build();
 	}
