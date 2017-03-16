@@ -34,7 +34,17 @@ public class BladmuziekEndpoint {
 		System.out.println("@POST: " + result.getId() + " - " + result.getOmschrijving());
 		return Response.accepted(result).build();
 	}
-	
+
+	@POST
+	@Consumes(MediaType.TEXT_XML)
+	@Path("{id}")
+	public Response postXMLtoBladmuziekById(@PathParam("id") Long id, String xml) {
+		Bladmuziek bladmuziek = this.bladmuziekService.findById(id);
+		bladmuziek.setXml(xml);
+		this.bladmuziekService.save(bladmuziek);
+		return Response.accepted().build();
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
