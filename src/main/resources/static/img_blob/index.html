@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- https://www.w3schools.com/html                               -->
+    <!-- https://www.w3schools.com/css                                -->
+    <!-- https://www.w3schools.com/jsref/dom_obj_all.asp              -->
+
+    <!-- ============================================================ -->
+    <!-- Toevoegen van een title en icon bovenaan een pagina          -->
+    <title>DrumApp</title>
+    <link rel="shortcut icon" type="image/png" href="media/fire.png"/>
+
+    <!-- ============================================================ -->
+    <!-- Toevoegen van stylesheets en javascript                      -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="javascript/script.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Hello RollingSticks</h1>
+    </header>
+    <div>
+      <article id="artDrum">
+        <header>
+          <h1>The DrumApp</h1>
+        </header>
+        <p id="par1" class="class1" title="Dit is een hulptext">
+          Hier gaan <pietjepuk>Test</pietjepuk> we drummen 
+          <a href="http://rollingsticks.test.carpago.nl/api/bladmuziek" target=_blank>
+            <img src="media/fire.png" height="40px" >
+          </a>
+        </p>
+        <p id="par2" class="class1">WE gaan gezellig drummen</p>
+        <img id="imgNew" src="media/thumb.png" width="10%" alt="Dit is een duim omhoog">
+        <audio id="player" src="media/test.mp3" controls></audio><br>
+        <button id="audioPlay" onclick="playAudio(this)">
+          <img id="imgPlay" src="media/control_play.png">
+        </button>
+      </article>
+      <article id="artDrum">
+        <header>
+          <h1>The DrumApp</h1>
+        </header>
+        <canvas id="canvasNew">
+        </canvas>
+      </article>
+    </div>
+    <div>
+      <article>
+        <header>
+          <h1>Input Fields 1</h1>
+        </header>
+        <label>Tekst</label><input type="text" placeholder="Type uw tekst"><br>
+        <label>Color</label><input type="color" value="#FF0000"><br>
+        <label>Date</label><input type="date"><br>
+        <label>Password</label><input type="password">
+      </article>
+      <article>
+        <header>
+          <h1>Input Fields 2</h1>
+        </header>
+        <label>Image File</label><input type="file" onchange="loadNewImage(event)"><br>
+        <label>Music File</label><input type="file" onchange="loadNewMP3(event)"><br>
+        <label>Number</label><input type="number" min=20 max=30 value=25><br>
+        <button onclick="alert('geklikt')">Klik hierop</button>
+        <input type="button" value="Input Button" onclick='alert("geklikt")'>
+      </article>
+    </div>
+  </body>
+</html>
