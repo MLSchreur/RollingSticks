@@ -82,6 +82,16 @@ public class BladmuziekEndpoint {
 		return Response.ok(result).build();
 	}
 	
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	@Path("{id}/xml")
+	public Response getXMLfromBladmuziekById(@PathParam("id") Long id) {
+		Bladmuziek result = this.bladmuziekService.findById(id);
+		String xml = result.getXml();
+		System.out.println("Length XML to be sent: " + xml.length());
+		return Response.ok(result.getXml()).build();
+	}	
+	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
