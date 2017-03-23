@@ -27,9 +27,9 @@ public class LeerlingEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postLeerling(Leerling leerling){
-		System.out.println("pre@POST: (" + leerling.getId() + ") " + leerling.getLeerling());
+//		System.out.println("pre@POST: (" + leerling.getId() + ") " + leerling.getLeerling());
 		Leerling result = leerlingService.save(leerling);
-		System.out.println("@POST: (" + result.getId() + ") " + result.getLeerling());
+//		System.out.println("@POST: (" + result.getId() + ") " + result.getLeerling());
 		return Response.accepted(result).build();
 	}
 	
@@ -63,10 +63,10 @@ public class LeerlingEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response putTekst(Leerling leerling) {
-		System.out.println("pre@PUT: (" + leerling.getId() + ") " + leerling.getLeerling());
+//		System.out.println("pre@PUT: (" + leerling.getId() + ") " + leerling.getLeerling());
 		this.leerlingService.save(leerling);
 		Leerling result = leerlingService.save(leerling);
-		System.out.println("@PUT: (" + result.getId() + ") " + result.getLeerling());
+//		System.out.println("@PUT: (" + result.getId() + ") " + result.getLeerling());
 		return Response.accepted(result).build();
 	}
 }

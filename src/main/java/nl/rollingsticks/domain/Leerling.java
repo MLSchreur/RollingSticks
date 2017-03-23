@@ -1,6 +1,11 @@
 package nl.rollingsticks.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,42 +18,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- * 
- * @author WCHorrel
- *
- */
-@Entity
-public class Leerling {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	private String leerling;
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
+@Entity
+public class Leerling extends Gebruiker {
+	@ElementCollection(fetch=FetchType.EAGER)
+	private List<Groep> groepen = new ArrayList<Groep>();
+
+	public List<Groep> getGroepen() {
+		return groepen;
 	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
+
+	public void setGroepen(List<Groep> groepen) {
+		this.groepen = groepen;
 	}
-	/**
-	 * @return the gebruikersnaam
-	 */
-	public String getLeerling() {
-		return leerling;
-	}
-	/**
-	 * @param leerling the leerling to set
-	 */
-	public void setLeerling(String leerling) {
-		this.leerling = leerling;
-	}
-	
-	
 }
