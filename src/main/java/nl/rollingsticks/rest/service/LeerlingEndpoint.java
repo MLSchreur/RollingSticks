@@ -27,17 +27,14 @@ public class LeerlingEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postLeerling(Leerling leerling){
-//		System.out.println("pre@POST: (" + leerling.getId() + ") " + leerling.getLeerling());
 		Leerling result = leerlingService.save(leerling);
-//		System.out.println("@POST: (" + result.getId() + ") " + result.getLeerling());
 		return Response.accepted(result).build();
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response getEigenaarById(@PathParam("id") Long id ) {
-		System.out.println("@GET: (" + id + ")");
+	public Response getLeerlingById(@PathParam("id") Long id ) {
 		Leerling result = this.leerlingService.findById(id);
 		return Response.ok(result).build();
 	}
@@ -45,7 +42,6 @@ public class LeerlingEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listLeerling(){
-		System.out.println("@GET: Got the list!");
 		Iterable <Leerling> result = leerlingService.findAll();
 		return Response.ok(result).build();
 	}
@@ -53,8 +49,7 @@ public class LeerlingEndpoint {
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response deleteTekstById(@PathParam("id") Long id){
-		System.out.println("@DELETE: (" + id+ ")");
+	public Response deleteLeerlingById(@PathParam("id") Long id){
 		this.leerlingService.deleteById(id);
 		return Response.accepted().build();
 	}
@@ -62,11 +57,30 @@ public class LeerlingEndpoint {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response putTekst(Leerling leerling) {
-//		System.out.println("pre@PUT: (" + leerling.getId() + ") " + leerling.getLeerling());
+	public Response putLeerling(Leerling leerling) {
 		this.leerlingService.save(leerling);
 		Leerling result = leerlingService.save(leerling);
-//		System.out.println("@PUT: (" + result.getId() + ") " + result.getLeerling());
 		return Response.accepted(result).build();
+	}
+	
+	////////CH
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/gebruikersnaam")
+	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
+		Leerling leerling = this.leerlingService.findById(id);
+		leerling.setGebruikersnaam(gebruikersnaam);
+		this.leerlingService.save(leerling);
+		return Response.accepted().build();
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/wachtwoord")
+	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
+		Leerling leerling = this.leerlingService.findById(id);
+		leerling.setWachtwoord(wachtwoord);
+		this.leerlingService.save(leerling);
+		return Response.accepted().build();
 	}
 }

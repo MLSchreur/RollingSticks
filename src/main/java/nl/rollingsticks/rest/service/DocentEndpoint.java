@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,4 +36,27 @@ public class DocentEndpoint {
 		Iterable <Docent> result = docentService.findAll();
 		return Response.ok(result).build();
 	}
+	
+	////////CH
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/gebruikersnaam")
+	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
+		Docent docent = this.docentService.findById(id);
+		docent.setGebruikersnaam(gebruikersnaam);
+		this.docentService.save(docent);
+		return Response.accepted().build();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/wachtwoord")
+	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
+		Docent docent = this.docentService.findById(id);
+		docent.setWachtwoord(wachtwoord);
+		this.docentService.save(docent);
+		return Response.accepted().build();
+	}
 }
+
+

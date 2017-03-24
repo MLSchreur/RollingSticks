@@ -29,5 +29,4 @@ public class LeerlingService {
 	public void deleteById(Long id) {
 		leerlingRepository.delete(id);
 	}
-	
 }

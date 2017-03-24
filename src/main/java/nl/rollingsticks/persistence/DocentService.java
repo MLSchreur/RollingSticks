@@ -19,4 +19,13 @@ public class DocentService {
 		Iterable <Docent> result = docentRepository.findAll();
 		return result;
 	}
+	
+	////////
+	public Docent findById(Long id) {
+		return docentRepository.findOne(id);
+	}
+
+	public void deleteById(Long id) {
+		docentRepository.delete(id);
+	}
 }
