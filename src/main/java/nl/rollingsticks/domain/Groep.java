@@ -3,25 +3,33 @@ package nl.rollingsticks.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 @Entity
 public class Groep {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@ElementCollection(fetch=FetchType.EAGER)
-	private List<Leerling> leerlingen = new ArrayList<Leerling>();
-//	@ElementCollection(fetch=FetchType.EAGER)
-//	private List<Huiswerkopdracht> huiswerkopdrachten = new ArrayList<Huiswerkopdracht>();
+	
+	@ManyToMany(fetch=FetchType.EAGER, mappedBy="groepen")
+	@Fetch(FetchMode.SELECT)
+	private List<Leerling> leerlingen = new ArrayList<>();
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	private List<Huiswerkopdracht> huiswerkopdrachten = new ArrayList<>();
+
 	private String naam;
 	/**
 	 * @return the id
@@ -50,17 +58,16 @@ public class Groep {
 	/**
 	 * @return the huiswerkopdrachten
 	 */
-/*	public List<Huiswerkopdracht> getHuiswerkopdrachten() {
+	public List<Huiswerkopdracht> getHuiswerkopdrachten() {
 		return huiswerkopdrachten;
 	}
 	/**
 	 * @param huiswerkopdrachten the huiswerkopdrachten to set
-	 
+ 	*/ 
 	public void setHuiswerkopdrachten(List<Huiswerkopdracht> huiswerkopdrachten) {
 		this.huiswerkopdrachten = huiswerkopdrachten;
 	}
-*/
-/**
+	/**
 	 * @return the naam
 	 */
 	public String getNaam() {
