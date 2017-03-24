@@ -22,13 +22,14 @@ public class Muziekstuk {
 	private String artiest;
 	private String titel;
 	private String omschrijving;
-	
 	private String mp3;
 	
 	@Lob
 	@Column(name = "blob_xml", length = 17777215)
 	private String xml;
 	
+	@Lob
+	@Column(name = "blob_pictogram", length = 17777215)
 	byte[] pictogram;
 
 	/**

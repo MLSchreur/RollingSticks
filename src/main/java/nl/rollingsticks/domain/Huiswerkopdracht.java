@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * @author Carina Horrel
@@ -20,7 +23,9 @@ public class Huiswerkopdracht {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@ElementCollection(fetch=FetchType.EAGER)
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
 
 	private Date lesDatum;
