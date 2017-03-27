@@ -55,6 +55,8 @@ public class LeerlingEndpoint {
 		if (leerling == null) {
 			return Response.noContent().build();
 		} else {
+			Leerling l2 = this.leerlingService.findById(id);
+			System.out.println(leerling.equals(l2));
 			LeerlingModelBasic result = new LeerlingModelBasic(leerling);
 			return Response.ok(result).build();
 		}

@@ -58,10 +58,7 @@ public class Gebruiker {
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
-// ===================================================
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+// ============================================================
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,9 +67,6 @@ public class Gebruiker {
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -83,12 +77,9 @@ public class Gebruiker {
 			return false;
 		Gebruiker other = (Gebruiker) obj;
 		if (gebruikersnaam == null) {
-			if (other.gebruikersnaam != null)
-				return false;
-		} else if (!gebruikersnaam.equals(other.gebruikersnaam))
-			return false;
-		if (id != other.id)
-			return false;
+			if (other.gebruikersnaam != null) return false;
+		} else if (!gebruikersnaam.equals(other.gebruikersnaam)) return false;
+		if (id != other.id)	return false;
 		return true;
 	}
 	
