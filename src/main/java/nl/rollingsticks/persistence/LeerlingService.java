@@ -16,7 +16,7 @@ public class LeerlingService {
 	
 	private LeerlingRepository leerlingRepository;
 
-	public Leerling save(Leerling leerling){
+	public Leerling save(Leerling leerling) {
 		return leerlingRepository.save(leerling);
 	}
 
@@ -34,8 +34,8 @@ public class LeerlingService {
 	}
 	
 	/**
-	 * 
-	 * @param leerling
+	 * Maak een nieuwe leerling aan in de database. Er worden wat checks uitgevoerd om database foutmeldingen te voorkomen.
+	 * @param leerling De id van de nieuwe leerling
 	 * @return de nieuwe id of anders <ul>
 	 * <li>-1 als de leerling een id heeft
 	 * <li>-2 als een voornaam, achternaam of gebruikersnaam gelijk is aan null

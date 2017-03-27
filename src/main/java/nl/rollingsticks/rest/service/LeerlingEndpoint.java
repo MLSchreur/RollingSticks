@@ -26,7 +26,19 @@ import nl.rollingsticks.persistence.LeerlingService;
 public class LeerlingEndpoint {
 	@Autowired
 	private LeerlingService leerlingService;
-	
+
+	/**
+	 * POST a new Leerling. 
+	 *    If there is an id in the Leerling, no new Leerling is created
+	 *    If the gebruikersnaam is in use or absent, no new leerling is created
+	 * @param leerling the new Leerling to be added to the database
+	 * @return 202 (accepted) and <ul>
+	 *   <li>id of the newly created leerling or 
+	 *   <li>-1 if an id was included or
+	 *   <li>-2 if gebruikersnaam, voornaam or achternaam is absent or
+	 *   <li>-3 if gebruikersnaam already exists
+	 *   </ul>   
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
