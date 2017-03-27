@@ -1,0 +1,5 @@
+nl.rollingsticks
+nl.rollingsticks.config
+nl.rollingsticks.domain
+nl.rollingsticks.persistence
+nl.rollingsticks.rest.service
