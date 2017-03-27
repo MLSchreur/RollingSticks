@@ -5,6 +5,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * Superclass voor leerlingen en docent
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-03-23
+ */
 
 @MappedSuperclass
 public class Gebruiker {
@@ -17,42 +23,52 @@ public class Gebruiker {
 	private String achternaam;
 	private String gebruikersnaam;
 	private String wachtwoord;
+	
 	public long getId() {
 		return id;
 	}
+	
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getVoornaam() {
 		return voornaam;
 	}
+
 	public void setVoornaam(String voornaam) {
 		this.voornaam = voornaam;
 	}
+	
 	public String getTussenvoegsel() {
 		return tussenvoegsel;
 	}
+	
 	public void setTussenvoegsel(String tussenvoegsel) {
 		this.tussenvoegsel = tussenvoegsel;
 	}
+	
 	public String getAchternaam() {
 		return achternaam;
 	}
+	
 	public void setAchternaam(String achternaam) {
 		this.achternaam = achternaam;
 	}
+	
 	public String getGebruikersnaam() {
 		return gebruikersnaam;
 	}
+	
 	public void setGebruikersnaam(String gebruikersnaam) {
 		this.gebruikersnaam = gebruikersnaam;
 	}
+	
 	public String getWachtwoord() {
 		return wachtwoord;
 	}
+	
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
-	
-	
 }

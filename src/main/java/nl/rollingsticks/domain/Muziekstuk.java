@@ -8,9 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 /**
- * 
+ * Lesgroep binnen de drumschool
  * @author WCHorrel
- *
+ * @version 0.1.0
+ * @since 2017-03-23
  */
 
 @Entity
@@ -32,103 +33,59 @@ public class Muziekstuk {
 	@Column(name = "blob_pictogram", length = 17777215)
 	byte[] pictogram;
 
-	/**
-	 * @return the id
-	 */
 	public long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the artiest
-	 */
 	public String getArtiest() {
 		return artiest;
 	}
 
-	/**
-	 * @param artiest the artiest to set
-	 */
 	public void setArtiest(String artiest) {
 		this.artiest = artiest;
 	}
 
-	/**
-	 * @return the titel
-	 */
 	public String getTitel() {
 		return titel;
 	}
 
-	/**
-	 * @param titel the titel to set
-	 */
 	public void setTitel(String titel) {
 		this.titel = titel;
 	}
 
-	/**
-	 * @return the omschrijving
-	 */
 	public String getOmschrijving() {
 		return omschrijving;
 	}
 
-	/**
-	 * @param omschrijving the omschrijving to set
-	 */
 	public void setOmschrijving(String omschrijving) {
 		this.omschrijving = omschrijving;
 	}
 
-	/**
-	 * @return the mp3
-	 */
 	public String getMp3() {
 		return mp3;
 	}
 
-	/**
-	 * @param mp3 the mp3 to set
-	 */
 	public void setMp3(String mp3) {
 		this.mp3 = mp3;
 	}
 
-	/**
-	 * @return the xml
-	 */
 	public String getXml() {
 		return xml;
 	}
 
-	/**
-	 * @param xml the xml to set
-	 */
 	public void setXml(String xml) {
 		this.xml = xml;
 	}
 
-	/**
-	 * @return the pictogram
-	 */
 	public byte[] getPictogram() {
 		return pictogram;
 	}
 
-	/**
-	 * @param pictogram the pictogram to set
-	 */
 	public void setPictogram(byte[] pictogram) {
 		this.pictogram = pictogram;
 	}
-	
-
 }

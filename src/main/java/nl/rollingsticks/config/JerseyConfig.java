@@ -6,7 +6,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.rest.service.BladmuziekEndpoint;
-import nl.rollingsticks.rest.service.EigenaarEndpoint;
 import nl.rollingsticks.rest.service.LeerlingEndpoint;
 
 import nl.rollingsticks.rest.service.MuziekstukEndpoint;
@@ -26,7 +25,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(MuziekstukEndpoint.class);
 		register(GroepEndpoint.class);
 		register(HuiswerkopdrachtEndpoint.class);
-		register(EigenaarEndpoint.class);
 		register(LeerlingEndpoint.class);
 		register(DocentEndpoint.class);
 	}

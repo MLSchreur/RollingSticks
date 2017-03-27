@@ -14,6 +14,12 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+/**
+ * Lesgroep binnen de drumschool
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-03-23
+ */
 
 @Entity
 public class Groep {
@@ -31,54 +37,37 @@ public class Groep {
 	private List<Huiswerkopdracht> huiswerkopdrachten = new ArrayList<>();
 
 	private String naam;
-	/**
-	 * @return the id
-	 */
+
 	public long getId() {
 		return id;
 	}
-	/**
-	 * @param id the id to set
-	 */
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	/**
-	 * @return the leerlingen
-	 */
+
 	public List<Leerling> getLeerlingen() {
 		return leerlingen;
 	}
-	/**
-	 * @param leerlingen the leerlingen to set
-	 */
+
 	public void setLeerlingen(List<Leerling> leerlingen) {
 		this.leerlingen = leerlingen;
 	}
-	/**
-	 * @return the huiswerkopdrachten
-	 */
+
 	public List<Huiswerkopdracht> getHuiswerkopdrachten() {
 		return huiswerkopdrachten;
 	}
-	/**
-	 * @param huiswerkopdrachten the huiswerkopdrachten to set
- 	*/ 
+
 	public void setHuiswerkopdrachten(List<Huiswerkopdracht> huiswerkopdrachten) {
 		this.huiswerkopdrachten = huiswerkopdrachten;
 	}
-	/**
-	 * @return the naam
-	 */
+
 	public String getNaam() {
 		return naam;
 	}
-	/**
-	 * @param naam the naam to set
-	 */
+
 	public void setNaam(String naam) {
 		this.naam = naam;
 	}
-	
 }
 	

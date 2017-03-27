@@ -5,6 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Bestemd voor documentatie tijdens ontwikkeling
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-03-23
+ */
+
 @Entity
 public class Tekst {
 

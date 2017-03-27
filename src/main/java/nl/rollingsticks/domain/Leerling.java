@@ -10,6 +10,12 @@ import javax.persistence.ManyToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+/**
+ * Leerlingen van de drumschool
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-03-23
+ */
 
 @Entity
 public class Leerling extends Gebruiker {
