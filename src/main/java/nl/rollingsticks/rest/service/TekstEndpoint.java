@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import nl.rollingsticks.domain.Tekst;
 import nl.rollingsticks.persistence.TekstService;
 
-@Path("tekst")
+@Path("verzoek")
 @Component
 public class TekstEndpoint {
 
@@ -28,9 +28,9 @@ public class TekstEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postTekst(Tekst tekst){
-		System.out.println("pre@POST: (" + tekst.getId() + ") " + tekst.getTekst());
+		System.out.println("pre@POST: (" + tekst.getId() + ") " + tekst.getHttpMethod() + " " + tekst.getUrl());
 		Tekst result = tekstService.save(tekst);
-		System.out.println("@POST: (" + result.getId() + ") " + result.getTekst());
+		System.out.println("@POST: (" + result.getId() + ") " + tekst.getHttpMethod() + " " + tekst.getUrl());
 		return Response.accepted(result).build();
 	}
 	
@@ -57,17 +57,17 @@ public class TekstEndpoint {
 	public Response deleteTekstById(@PathParam("id") Long id){
 		System.out.println("@DELETE: (" + id+ ")");
 		this.tekstService.deleteById(id);
-		return Response.accepted().build();
+		return Response.accepted(id).build();
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response putTekst(Tekst tekst) {
-		System.out.println("pre@PUT: (" + tekst.getId() + ") " + tekst.getTekst());
+		System.out.println("pre@PUT: (" + tekst.getId() + ") " + tekst.getHttpMethod() + " " + tekst.getUrl());
 		this.tekstService.save(tekst);
 		Tekst result = tekstService.save(tekst);
-		System.out.println("@PUT: (" + result.getId() + ") " + result.getTekst());
+		System.out.println("@PUT: (" + result.getId() + ") " + tekst.getHttpMethod() + " " + tekst.getUrl());
 		return Response.accepted(result).build();
 	}
 }
