@@ -1,5 +1,8 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Leerling;
+import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.persistence.LeerlingService;
 
 @Path("leerling")
@@ -35,14 +39,25 @@ public class LeerlingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response getLeerlingById(@PathParam("id") Long id ) {
-		Leerling result = this.leerlingService.findById(id);
-		return Response.ok(result).build();
+		Leerling leerling = this.leerlingService.findById(id);
+		if (leerling == null) {
+			return Response.noContent().build();
+		} else {
+			LeerlingModelBasic result = new LeerlingModelBasic(leerling);
+			return Response.ok(result).build();
+		}
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listLeerling(){
-		Iterable <Leerling> result = leerlingService.findAll();
+		List<LeerlingModelBasic> result = new ArrayList<>();
+		List<Leerling> leerlingen = new ArrayList<>();
+		leerlingen = (List<Leerling>) leerlingService.findAll();
+		for (int i=0 ; i<leerlingen.size() ; i++ ) {
+			LeerlingModelBasic lmb = new LeerlingModelBasic(leerlingen.get(i));
+			result.add(lmb);
+		}
 		return Response.ok(result).build();
 	}
 	
