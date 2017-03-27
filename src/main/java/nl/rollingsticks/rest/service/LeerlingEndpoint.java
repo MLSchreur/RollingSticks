@@ -81,33 +81,17 @@ public class LeerlingEndpoint {
 		return Response.accepted().build();
 	}
 
+	/**
+	 * Methode om een groep aan een Leerling toe te voegen
+	 * @param id de id van de Leerling
+	 * @param groep_id de id van de Groep die toegevoegd moet worden
+	 * @return true als de Groep is toegevoegd, anders false
+	 */
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Leerling leerling) {
-		this.leerlingService.save(leerling);
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/groep/{groep_id}")
+	public Response addGroepToLeerling(@PathParam("id") Long id, @PathParam("groep_id") Long groep_id) {
+		return Response.accepted(this.leerlingService.addGroepToLeerling(id, groep_id)).build();
 	}
 	
-	////////CH
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/gebruikersnaam")
-	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setGebruikersnaam(gebruikersnaam);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/wachtwoord")
-	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setWachtwoord(wachtwoord);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
 }

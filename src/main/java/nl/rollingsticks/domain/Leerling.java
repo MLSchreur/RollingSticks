@@ -25,4 +25,8 @@ public class Leerling extends Gebruiker {
 	public void setGroepen(List<Groep> groepen) {
 		this.groepen = groepen;
 	}
+	
+	public void addGroep(Groep groep) {
+		this.groepen.add(groep);
+	}
 }

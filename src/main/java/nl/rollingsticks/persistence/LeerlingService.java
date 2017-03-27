@@ -7,14 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Leerling;
 
 @Service
 @Transactional
 public class LeerlingService {
 	@Autowired
-	
 	private LeerlingRepository leerlingRepository;
+	
+	@Autowired
+	private GroepService groepService;
 
 	public Leerling save(Leerling leerling) {
 		return leerlingRepository.save(leerling);
@@ -58,5 +61,29 @@ public class LeerlingService {
 		}
 		Leerling result = this.leerlingRepository.save(leerling);
 		return result.getId();
+	}
+	
+	/**
+	 * Methode om een groep aan een Leerling toe te voegen
+	 * @param id de id van de Leerling
+	 * @param groep_id de id van de Groep die toegevoegd moet worden
+	 * @return true als de Groep is toegevoegd, anders false
+	 */
+	public boolean addGroepToLeerling(long id, long groep_id) {
+		Leerling leerling = this.findById(id);
+		Groep groep = this.groepService.findById(groep_id);
+		if (leerling == null || groep == null) {
+			return false;
+		} else {
+			for (int i=0 ; i<leerling.getGroepen().size() ; i++) {
+				if (leerling.getGroepen().get(i).getId() == groep_id) {
+					return false;
+				}
+			}
+			leerling.addGroep(groep);
+			this.leerlingRepository.save(leerling);
+			return true;
+		}
+		
 	}
 }
