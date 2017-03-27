@@ -29,10 +29,10 @@ public class LeerlingEndpoint {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postLeerling(Leerling leerling){
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
+		Long newId = leerlingService.newLeerling(leerling);
+		return Response.accepted(newId).build();
 	}
 	
 	@GET

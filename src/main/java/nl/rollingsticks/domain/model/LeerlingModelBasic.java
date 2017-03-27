@@ -12,6 +12,9 @@ public class LeerlingModelBasic {
 		this.leerling = leerling;
 	}
 	
+	public long getId() {
+		return this.leerling.getId();
+	}
 	public String getAchternaam() {
 		return this.leerling.getAchternaam();
 	}
