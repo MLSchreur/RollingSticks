@@ -1,5 +1,7 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -103,11 +105,20 @@ public class MuziekstukEndpoint {
 		}
 	}
 	
+	/**
+	 * Opvragen van alle muziekstukken.
+	 * @return 	Code 200 (OK)
+	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listTekst(){
 		System.out.println("@GET: Got the list!");
-		Iterable <Muziekstuk> result = muziekstukService.findAll();
+		Iterable <Muziekstuk> muziekstukken = muziekstukService.findAll();
+		ArrayList <MuziekstukModelBasic> result = new ArrayList<>();
+		for (Muziekstuk muziekstuk: muziekstukken) {
+			result.add(new MuziekstukModelBasic(muziekstuk));
+		}
+		System.out.println("Size ArrayList met muziekstukken (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
