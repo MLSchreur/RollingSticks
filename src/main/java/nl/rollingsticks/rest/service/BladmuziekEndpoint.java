@@ -25,14 +25,19 @@ public class BladmuziekEndpoint {
 	@Autowired
 	private BladmuziekService bladmuziekService;
 	
+	/**
+	 * Creëer een nieuw stuk Bladmuziek
+	 * @param bladmuziek creëren van nieuw stuk Bladmuziek
+	 * @return Code 202 (accepted) with the new vereniging id
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postTekst(Bladmuziek bladmuziek){
 		System.out.println("@POST: " + bladmuziek.getId() + " - " + bladmuziek.getOmschrijving());
 		Bladmuziek result = bladmuziekService.save(bladmuziek);
 		System.out.println("@POST: " + result.getId() + " - " + result.getOmschrijving());
-		return Response.accepted(result).build();
+		return Response.accepted(result.getId()).build();
 	}
 
 	@POST
