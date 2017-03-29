@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Muziekstuk;
+import nl.rollingsticks.domain.model.MuziekstukModelBasic;
 import nl.rollingsticks.persistence.MuziekstukService;
 
 @Path("muziekstuk")
@@ -25,9 +26,9 @@ public class MuziekstukEndpoint {
 	private MuziekstukService muziekstukService;
 	
 	/**
-	 * Creëer een nieuw stuk Muziekstuk
-	 * @param muziekstuk creëren van nieuw Muziekstuk
-	 * @return Code 202 (accepted) - incl id van muziekstuk
+	 * Creëer een nieuw stuk Muziekstuk.
+	 * @param 	muziekstuk Creëren van nieuw Muziekstuk.
+	 * @return 	Code 202 (Accepted) - incl id van muziekstuk.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -41,8 +42,10 @@ public class MuziekstukEndpoint {
 
 	/**
 	 * Opslaan van XML bij meegegeven Muziekstuk (id)
-	 * @param XML Opslaan van XML bij meegegeven id van muziekstuk
-	 * @return Code 202 (accepted)
+	 * @param	id	id van het muziekstuk wordt uit het path gehaald.
+	 * @param 	xml Opslaan van XML bij meegegeven id van muziekstuk.
+	 * @return 	Code 202 (Accepted)
+	 * @return 	Code 204 (No Content)
 	 */	
 	@POST
 	@Consumes(MediaType.TEXT_XML)
@@ -50,12 +53,14 @@ public class MuziekstukEndpoint {
 	public Response postXMLtoBladmuziekById(@PathParam("id") Long id, String xml) {
 		System.out.println("pre@POST-XML: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
-		// test inbouwen of muziekstuk al bestaat!!
-		System.out.println("pre@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
-		muziekstuk.setXml(xml);
-		this.muziekstukService.save(muziekstuk);
-		System.out.println("@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
-		return Response.accepted().build();
+		if (muziekstuk == null) {
+			return Response.noContent().build();
+		} else {
+			System.out.println("@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
+			muziekstuk.setXml(xml);
+			this.muziekstukService.save(muziekstuk);
+			return Response.accepted().build();
+		}
 	}
 
 	@POST
@@ -78,12 +83,24 @@ public class MuziekstukEndpoint {
 		return Response.accepted().build();
 	}
 
+	/**
+	 * Opvragen van het muziekstuk.
+	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
+	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)
+	 * @return 	Code 204 (No Content)
+	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response getBladmuziekById(@PathParam("id") Long id ) {
-		Muziekstuk result = this.muziekstukService.findById(id);
-		return Response.ok(result).build();
+		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
+		if (muziekstuk == null) {
+			return Response.noContent().build();
+		} else {
+			MuziekstukModelBasic result = new MuziekstukModelBasic(muziekstuk);
+			return Response.ok(result).build();
+		}
 	}
 	
 	@GET
@@ -94,13 +111,22 @@ public class MuziekstukEndpoint {
 		return Response.ok(result).build();
 	}
 	
+	/**
+	 * Opvragen van XML bestand van Muziekstuk (id).
+	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)
+	 * @return 	Code 204 (No Content)
+	 */	
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	@Path("{id}/xml")
 	public Response getXMLfromBladmuziekById(@PathParam("id") Long id) {
 		Muziekstuk result = this.muziekstukService.findById(id);
-		String xml = result.getXml();
-		return Response.ok(result.getXml()).build();
+		if (result == null) {
+			return Response.noContent().build();
+		} else {
+			return Response.ok(result.getXml()).build();
+		}
 	}	
 	
 	@DELETE
