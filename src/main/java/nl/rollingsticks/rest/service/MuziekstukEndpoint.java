@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Muziekstuk;
 import nl.rollingsticks.persistence.MuziekstukService;
 
@@ -25,21 +24,37 @@ public class MuziekstukEndpoint {
 	@Autowired
 	private MuziekstukService muziekstukService;
 	
+	/**
+	 * Creëer een nieuw stuk Muziekstuk
+	 * @param muziekstuk creëren van nieuw Muziekstuk
+	 * @return Code 202 (accepted) - incl id van muziekstuk
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postTekst(Muziekstuk muziekstuk){
+		System.out.println("pre@POST: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 		Muziekstuk result = muziekstukService.save(muziekstuk);
-		return Response.accepted(result).build();
+		System.out.println("@POST: " + result.getId() + " - " + result.getOmschrijving());
+		return Response.accepted(result.getId()).build();
 	}
 
+	/**
+	 * Opslaan van XML bij meegegeven Muziekstuk (id)
+	 * @param XML Opslaan van XML bij meegegeven id van muziekstuk
+	 * @return Code 202 (accepted)
+	 */	
 	@POST
 	@Consumes(MediaType.TEXT_XML)
 	@Path("{id}/xml")
 	public Response postXMLtoBladmuziekById(@PathParam("id") Long id, String xml) {
+		System.out.println("pre@POST-XML: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
+		// test inbouwen of muziekstuk al bestaat!!
+		System.out.println("pre@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 		muziekstuk.setXml(xml);
 		this.muziekstukService.save(muziekstuk);
+		System.out.println("@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 		return Response.accepted().build();
 	}
 
