@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 /**
- * Lesgroep binnen de drumschool
+ * Muziekstukken
  * @author WCHorrel
  * @version 0.1.0
  * @since 2017-03-23
