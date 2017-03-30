@@ -19,10 +19,12 @@ public class Tekst {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	private String aanvrager;
 	private String httpMethod;
 	private String url;
 	private String meegeven;
 	private String terug;
+	private String omschrijving;
 	private String status;
 	
 	public long getId() {
@@ -33,6 +35,14 @@ public class Tekst {
 		return httpMethod;
 	}
 
+
+	public String getAanvrager() {
+		return aanvrager;
+	}
+
+	public void setAanvrager(String aanvrager) {
+		this.aanvrager = aanvrager;
+	}
 
 	public void setHttpMethod(String httpMethod) {
 		this.httpMethod = httpMethod;
@@ -66,6 +76,14 @@ public class Tekst {
 
 	public void setTerug(String terug) {
 		this.terug = terug;
+	}
+
+	public String getOmschrijving() {
+		return omschrijving;
+	}
+
+	public void setOmschrijving(String omschrijving) {
+		this.omschrijving = omschrijving;
 	}
 
 	public String getStatus() {

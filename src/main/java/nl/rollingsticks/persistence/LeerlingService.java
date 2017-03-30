@@ -1,5 +1,8 @@
 package nl.rollingsticks.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +31,31 @@ public class LeerlingService {
 
 	public void deleteById(Long id) {
 		leerlingRepository.delete(id);
+	}
+	
+	/**
+	 * 
+	 * @param leerling
+	 * @return de nieuwe id of ander <ul>
+	 * <li>-1 als de leerling een id heeft
+	 * <li>-2 als leerling achternaam/voornaam of gebruikersnaam is null
+	 * <li>-3 als gebruikersnaam al bestaat
+	 */
+	public long newLeerling(Leerling leerling){
+		if (leerling.getId() != 0){
+			return -1;
+		} else if (leerling.getAchternaam() == null || leerling.getVoornaam() == null || leerling.getGebruikersnaam()== null ){
+			return -2;
+		} else {
+			List<Leerling> leerlingen = new ArrayList<>();
+			leerlingen = (List<Leerling>) this.leerlingRepository.findAll();
+			for (int i = 0; i < leerlingen.size(); i++) {
+				if(leerlingen.get(i).getGebruikersnaam().equals(leerling.getGebruikersnaam())){
+					return -3;
+				}
+			}
+		}
+		Leerling result = this.leerlingRepository.save(leerling);	
+		return result.getId();
 	}
 }
