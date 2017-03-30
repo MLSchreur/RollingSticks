@@ -1,5 +1,6 @@
 package nl.rollingsticks.domain;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,9 +19,13 @@ public class Gebruiker {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(nullable=false)
 	private String voornaam;
 	private String tussenvoegsel;
+	@Column(nullable=false)
 	private String achternaam;
+	
+	@Column(unique=true, nullable=false)
 	private String gebruikersnaam;
 	private String wachtwoord;
 	
@@ -64,9 +69,9 @@ public class Gebruiker {
 		this.gebruikersnaam = gebruikersnaam;
 	}
 	
-	public String getWachtwoord() {
-		return wachtwoord;
-	}
+//	public String getWachtwoord() {
+//		return wachtwoord;
+//	}
 	
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
