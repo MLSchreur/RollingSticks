@@ -161,7 +161,7 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 204 (No Content)
 	 */	
 	@GET
-	@Produces(MediaType.TEXT_XML)
+	@Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/img")
 	public Response getImgFromMuziekstukById(@PathParam("id") Long id) {
 		Muziekstuk result = this.muziekstukService.findById(id);
