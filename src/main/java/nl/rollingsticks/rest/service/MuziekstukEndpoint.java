@@ -35,7 +35,7 @@ public class MuziekstukEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response postTekst(Muziekstuk muziekstuk){
+	public Response postMuziekstuk(Muziekstuk muziekstuk){
 		System.out.println("pre@POST: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 		Muziekstuk result = muziekstukService.save(muziekstuk);
 		System.out.println("@POST: " + result.getId() + " - " + result.getOmschrijving());
@@ -52,7 +52,7 @@ public class MuziekstukEndpoint {
 	@POST
 	@Consumes(MediaType.TEXT_XML)
 	@Path("{id}/xml")
-	public Response postXMLtoBladmuziekById(@PathParam("id") Long id, String xml) {
+	public Response postXMLtoMuziekstukById(@PathParam("id") Long id, String xml) {
 		System.out.println("pre@POST-XML: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		if (muziekstuk == null) {
@@ -65,20 +65,33 @@ public class MuziekstukEndpoint {
 		}
 	}
 
+	/**
+	 * Opslaan van pictogram bij meegegeven Muziekstuk (id)
+	 * @param	id	id van het muziekstuk wordt uit het path gehaald.
+	 * @param 	img Opslaan van pictogram bij meegegeven id van muziekstuk.
+	 * @return 	Code 202 (Accepted)
+	 * @return 	Code 204 (No Content)
+	 */	
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/img")
-	public Response postIMGtoBladmuziekById(@PathParam("id") Long id, byte[] img) {
+	public Response postImgtoMuziekstukById(@PathParam("id") Long id, byte[] img) {
+		System.out.println("pre@POST-img: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
-		muziekstuk.setPictogram(img);
-		this.muziekstukService.save(muziekstuk);
-		return Response.accepted().build();
+		if (muziekstuk == null) {
+			return Response.noContent().build();
+		} else {
+			System.out.println("@POST-img: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
+			muziekstuk.setPictogram(img);
+			this.muziekstukService.save(muziekstuk);
+			return Response.accepted().build();
+		}
 	}
 
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/mp3")
-	public Response postMP3toBladmuziekById(@PathParam("id") Long id, byte[] mp3) {
+	public Response postMP3toMuziekstukById(@PathParam("id") Long id, byte[] mp3) {
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		muziekstuk.setPictogram(mp3);
 		this.muziekstukService.save(muziekstuk);
@@ -92,10 +105,11 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 200 (OK)
 	 * @return 	Code 204 (No Content)
 	 */	
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response getBladmuziekById(@PathParam("id") Long id ) {
+	public Response getMuziekstukkById(@PathParam("id") Long id ) {
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		if (muziekstuk == null) {
 			return Response.noContent().build();
@@ -111,7 +125,7 @@ public class MuziekstukEndpoint {
 	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listTekst(){
+	public Response listMuziekstuk(){
 		System.out.println("@GET: Got the list!");
 		Iterable <Muziekstuk> muziekstukken = muziekstukService.findAll();
 		ArrayList <MuziekstukModelBasic> result = new ArrayList<>();
@@ -131,7 +145,7 @@ public class MuziekstukEndpoint {
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	@Path("{id}/xml")
-	public Response getXMLfromBladmuziekById(@PathParam("id") Long id) {
+	public Response getXMLFromMuziekstukById(@PathParam("id") Long id) {
 		Muziekstuk result = this.muziekstukService.findById(id);
 		if (result == null) {
 			return Response.noContent().build();
@@ -140,10 +154,28 @@ public class MuziekstukEndpoint {
 		}
 	}	
 	
+	/**
+	 * Opvragen van pictogram van Muziekstuk (id).
+	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)
+	 * @return 	Code 204 (No Content)
+	 */	
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	@Path("{id}/img")
+	public Response getImgFromMuziekstukById(@PathParam("id") Long id) {
+		Muziekstuk result = this.muziekstukService.findById(id);
+		if (result == null) {
+			return Response.noContent().build();
+		} else {
+			return Response.ok(result.getPictogram()).build();
+		}
+	}	
+	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response deleteBladmuziekById(@PathParam("id") Long id){
+	public Response deleteMuziekstukById(@PathParam("id") Long id){
 		this.muziekstukService.deleteById(id);
 		return Response.accepted().build();
 	}
