@@ -20,13 +20,21 @@ import nl.rollingsticks.persistence.HuiswerkopdrachtService;
 @Path("huiswerkopdracht")
 @Component
 public class HuiswerkopdrachtEndpoint {
+	
 	@Autowired
 	private HuiswerkopdrachtService huiswerkopdrachtService;
 	
+	/**
+	 * Cre&euml;er een nieuwe Huiswerkopdracht.
+	 * @param 	huiswerkopdracht Cre&euml;ren van nieuw Huiswerkopdracht.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 			Id van opgeslagen muziekstuk wordt als text_plain teruggegeven.
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postHuiswerkopdracht(Huiswerkopdracht huiswerkopdracht){
+		System.out.println("pre@POST: " + huiswerkopdracht.getId() + " - " + huiswerkopdracht.getNotitie());
 		Huiswerkopdracht result = huiswerkopdrachtService.save(huiswerkopdracht);
 		return Response.accepted(result).build();
 	}
