@@ -28,9 +28,10 @@ public class MuziekstukEndpoint {
 	private MuziekstukService muziekstukService;
 	
 	/**
-	 * Creëer een nieuw stuk Muziekstuk.
-	 * @param 	muziekstuk Creëren van nieuw Muziekstuk.
-	 * @return 	Code 202 (Accepted) - incl id van muziekstuk.
+	 * Cre&euml;er een nieuw stuk Muziekstuk.
+	 * @param 	muziekstuk Cre&euml;ren van nieuw Muziekstuk.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 			Id van opgeslagen muziekstuk wordt als text_plain teruggegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -44,10 +45,10 @@ public class MuziekstukEndpoint {
 
 	/**
 	 * Opslaan van XML bij meegegeven Muziekstuk (id)
-	 * @param	id	id van het muziekstuk wordt uit het path gehaald.
+	 * @param	id	Id van het Muziekstuk wordt uit het path gehaald.
 	 * @param 	xml Opslaan van XML bij meegegeven id van muziekstuk.
-	 * @return 	Code 202 (Accepted)
-	 * @return 	Code 204 (No Content)
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)<br>
 	 */	
 	@POST
 	@Consumes(MediaType.TEXT_XML)
@@ -67,10 +68,10 @@ public class MuziekstukEndpoint {
 
 	/**
 	 * Opslaan van pictogram bij meegegeven Muziekstuk (id)
-	 * @param	id	id van het muziekstuk wordt uit het path gehaald.
+	 * @param	id	Id van het Muziekstuk wordt uit het path gehaald.
 	 * @param 	img Opslaan van pictogram bij meegegeven id van muziekstuk.
-	 * @return 	Code 202 (Accepted)
-	 * @return 	Code 204 (No Content)
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)<br>
 	 */	
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -101,9 +102,10 @@ public class MuziekstukEndpoint {
 	/**
 	 * Opvragen van het muziekstuk.
 	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
-	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
-	 * @return 	Code 200 (OK)
-	 * @return 	Code 204 (No Content)
+	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 204 (No Content)<br>
+	 * 			Opgevraagd Muziekstuk wordt (zonder XML, Pictogram 	&amp; MP3) als JSON objecten teruggegeven.
 	 */	
 	
 	@GET
@@ -120,8 +122,9 @@ public class MuziekstukEndpoint {
 	}
 	
 	/**
-	 * Opvragen van alle muziekstukken.
-	 * @return 	Code 200 (OK)
+	 * Opvragen van alle Muziekstukken.
+	 * @return 	Code 200 (OK)<br>
+	 * 			Alle Muziekstukken (zonder XML, Pictogram 	&amp; MP3) worden als JSON objecten teruggegeven.
 	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -138,9 +141,10 @@ public class MuziekstukEndpoint {
 	
 	/**
 	 * Opvragen van XML bestand van Muziekstuk (id).
-	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
-	 * @return 	Code 200 (OK)
-	 * @return 	Code 204 (No Content)
+	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 204 (No Content)<br>
+	 * 			XML bestand van Muziekstuk wordt teruggegeven in text_xml vorm
 	 */	
 	@GET
 	@Produces(MediaType.TEXT_XML)
@@ -156,9 +160,10 @@ public class MuziekstukEndpoint {
 	
 	/**
 	 * Opvragen van pictogram van Muziekstuk (id).
-	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
-	 * @return 	Code 200 (OK)
-	 * @return 	Code 204 (No Content)
+	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 204 (No Content)<br>
+	 * 			Pictogram van Muziekstuk wordt teruggegeven in base64 codering
 	 */	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -175,10 +180,10 @@ public class MuziekstukEndpoint {
 	// !!!! Zodra de mp3 ook geïmplementeerd wordt en deze op de fileserver komt, moet de Delete hierop worden aangepast.
 	// Wordt de mp3 als Base64 in de database gezet, dan is er geen aanpassing nodig.
 	/**
-	 * Verwijderen van het opgegeven muziekstuk (id).
-	 * @param 	id 	id van het te verwijderen muziekstuk wordt uit het path gehaald.
-	 * @return 	Code 202 (Accepted)
-	 * @return 	Code 204 (No Content)
+	 * Verwijderen van het opgegeven Muziekstuk (id).
+	 * @param 	id 	Id van het te verwijderen Muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
 	 */	
 	@DELETE
 	@Path("{id}")
@@ -196,7 +201,7 @@ public class MuziekstukEndpoint {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response putTekst(Muziekstuk muziekstuk) {
+	public Response putMuziekstuk(Muziekstuk muziekstuk) {
 		this.muziekstukService.save(muziekstuk);
 		Muziekstuk result = muziekstukService.save(muziekstuk);
 		return Response.accepted(result).build();
