@@ -1,5 +1,7 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Huiswerkopdracht;
 import nl.rollingsticks.domain.Muziekstuk;
+import nl.rollingsticks.domain.model.HuiswerkopdrachtModelBasic;
 import nl.rollingsticks.persistence.HuiswerkopdrachtService;
 import nl.rollingsticks.persistence.MuziekstukService;
 
@@ -51,7 +54,9 @@ public class HuiswerkopdrachtEndpoint {
 	 * @param 	id 	Id van de Huiswerkopdracht wordt uit het path gehaald.
 	 * @return 	Code 200 (OK)<br>
 	 * 		 	Code 204 (No Content)<br>
-	 * 			Opgevraagde Huiswerkopdracht wordt als JSON object teruggegeven.
+	 * 			Opgevraagde Huiswerkopdracht wordt als JSON object teruggegeven.<br>
+	 * 			Muziekstukken kunnen via api's van muziekstuk verder opgevraagd worden.<br>
+	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3, ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
 	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -63,8 +68,9 @@ public class HuiswerkopdrachtEndpoint {
 			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
 			return Response.noContent().build();
 		} else {
-			System.out.println("Huiswerk - @GET: (" + id + ") " + huiswerkopdracht.getLesDatum());
-			return Response.ok(huiswerkopdracht).build();
+			HuiswerkopdrachtModelBasic result = new HuiswerkopdrachtModelBasic(huiswerkopdracht);
+			System.out.println("Huiswerk - @GET: (" + id + ") " + huiswerkopdracht.getNotitie());
+			return Response.ok(result).build();
 		}
 	}
 	
@@ -77,7 +83,12 @@ public class HuiswerkopdrachtEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listHuiswerkopdracht(){
 		System.out.println("@GET: Got the list!");
-		Iterable <Huiswerkopdracht> result = huiswerkopdrachtService.findAll();
+		Iterable <Huiswerkopdracht> huiswerkopdrachten = huiswerkopdrachtService.findAll();
+		ArrayList<HuiswerkopdrachtModelBasic> result = new ArrayList<>();
+		for (Huiswerkopdracht huiswerkopdracht : huiswerkopdrachten) {
+			result.add(new HuiswerkopdrachtModelBasic(huiswerkopdracht));
+		}
+		System.out.println("Muziekstuk - @GET: Size ArrayList met huiswerkopdrachten (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
@@ -132,8 +143,6 @@ public class HuiswerkopdrachtEndpoint {
 				if (muziekstukDel) {
 					this.muziekstukService.deleteById(muziekstukId);
 				}
-				//this.muziekstukService.deleteById(muziekstukId);
-				//this.huiswerkopdrachtService.deleteById(id);
 				return Response.accepted().build();
 			}
 		}
