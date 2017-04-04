@@ -82,6 +82,7 @@ public class HuiswerkopdrachtEndpoint {
 	}
 	
 	/**
+	 * NOG NIET GEBRUIKEN - NOG ONDUIDELIJK WAT ER GEBEURT MET DE GEKOPPELDE MUZIEKSTUKKEN! <br>
 	 * Verwijderen van de opgegeven Huiswerkopdracht (id).
 	 * @param 	id 	Id van de te verwijderen Huiswerkopdracht wordt uit het path gehaald.
 	 * @return 	Code 202 (Accepted)<br>
@@ -89,7 +90,7 @@ public class HuiswerkopdrachtEndpoint {
 	 */	
 	@DELETE
 	@Path("{id}")
-	public Response deleteTekstById(@PathParam("id") Long id){
+	public Response deleteMuziekstukById(@PathParam("id") Long id){
 		System.out.println("Huiswerk - pre@DELETE: id provided: " + id);
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
 		if (huiswerkopdracht == null) {
@@ -102,8 +103,46 @@ public class HuiswerkopdrachtEndpoint {
 	}
 
 	/**
+	 * Verwijderen van een Muziekstuk uit de opgegeven Huiswerkopdracht (id).
+	 * @param 	id 				Id van de Huiswerkopdracht wordt uit het path gehaald.
+	 * @param	muziekstukId	Id van het te verwijderen Muziekstuk wordt uit het path gehaald.
+	 * @param	muziekstukDel	Middels een boolean wordt bepaald of het muziekstuk vervolgens ook uit de database verwijderd mag worden.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */	
+	@DELETE
+	@Path("{id}/{muziekstuk_id}/{muziekstuk_delete}")
+	public Response deleteMuziekstukFromHuiswerkopdrachtById(
+			@PathParam("id") 				Long id, 
+			@PathParam("muziekstuk_id") 	Long muziekstukId, 
+			@PathParam("muziekstuk_delete") boolean muziekstukDel){
+		System.out.println("Huiswerk(muziekstuk) - pre@DELETE: id's provided: " + id + "/" + muziekstukId + "/" + muziekstukDel);
+		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
+		if (huiswerkopdracht == null) {
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
+		} else {
+			Muziekstuk muziekstuk = this.muziekstukService.findById(muziekstukId);
+			if (muziekstuk == null) {
+				System.out.println("Huiswerk/muziekstuk - Id " + muziekstukId + " bestaat niet.");
+				return Response.noContent().build();
+			} else {
+				huiswerkopdracht.removerMuziekstukFromMuziekstukken(muziekstuk);
+				this.huiswerkopdrachtService.save(huiswerkopdracht);
+				if (muziekstukDel) {
+					this.muziekstukService.deleteById(muziekstukId);
+				}
+				//this.muziekstukService.deleteById(muziekstukId);
+				//this.huiswerkopdrachtService.deleteById(id);
+				return Response.accepted().build();
+			}
+		}
+	}
+
+	/**
 	 * Toevoegen van Muziekstuk aan opgegeven Huiswerkopdracht (id).
-	 * @param 	id 	Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @param 	id 			Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @param	muziekstuk	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)
 	 */	

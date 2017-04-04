@@ -69,4 +69,8 @@ public class Huiswerkopdracht {
 	public void addMuziekstukToMuziekstukken (Muziekstuk muziekstuk) {
 		this.muziekstukken.add(muziekstuk);
 	}
+	
+	public void removerMuziekstukFromMuziekstukken (Muziekstuk muziekstuk) {
+		this.muziekstukken.remove(muziekstuk);
+	}
 }

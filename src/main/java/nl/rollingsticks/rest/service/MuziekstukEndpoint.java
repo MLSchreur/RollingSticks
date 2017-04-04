@@ -50,7 +50,7 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)<br>
 	 */	
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_XML)
 	@Path("{id}/xml")
 	public Response postXMLtoMuziekstukById(@PathParam("id") Long id, String xml) {
@@ -73,7 +73,7 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)<br>
 	 */	
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/img")
 	public Response postImgtoMuziekstukById(@PathParam("id") Long id, byte[] img) {
@@ -89,7 +89,7 @@ public class MuziekstukEndpoint {
 		}
 	}
 
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/mp3")
 	public Response postMP3toMuziekstukById(@PathParam("id") Long id, byte[] mp3) {
