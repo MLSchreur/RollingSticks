@@ -35,11 +35,12 @@ public class LeerlingService {
 	
 	/**
 	 * 
-	 * @param leerling
+	 * @param leerling Leerling van de Drumschool
 	 * @return de nieuwe id of ander <ul>
-	 * <li>-1 als de leerling een id heeft
-	 * <li>-2 als leerling achternaam/voornaam of gebruikersnaam is null
-	 * <li>-3 als gebruikersnaam al bestaat
+	 * <li>-1 als de leerling een id heeft</li>
+	 * <li>-2 als leerling achternaam/voornaam of gebruikersnaam is null</li>
+	 * <li>-3 als gebruikersnaam al bestaat</li>
+	 * </ul>
 	 */
 	public long newLeerling(Leerling leerling){
 		if (leerling.getId() != 0){

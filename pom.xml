@@ -71,36 +71,6 @@
 					<executable>true</executable>
 				</configuration>
 			</plugin>
-			<!-- ======================================================================= -->
-			<!-- used when generating javadoc from command line with mvn javadoc:javadoc -->
-			<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
-			<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/usage.html -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<configuration>
-					<reportOutputDirectory>${project.build.directory}/classes/static</reportOutputDirectory>
-					<show>private</show>        <!-- public protected package or private -->
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-
-	<!-- ======================================================================= -->
-	<!-- used when generating javadoc from command line with mvn clean site -->
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<configuration>
-					<reportOutputDirectory>${project.build.directory}/classes/static</reportOutputDirectory>
-					<show>package</show>        <!-- public protected package or private -->
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
-
 </project>
