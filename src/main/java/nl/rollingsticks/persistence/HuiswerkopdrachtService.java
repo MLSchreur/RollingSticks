@@ -13,7 +13,7 @@ public class HuiswerkopdrachtService {
 	@Autowired
 	private HuiswerkopdrachtRepository huiswerkopdrachtRepository;
 
-	public Huiswerkopdracht save(Huiswerkopdracht huiswerkopdracht){
+	public Huiswerkopdracht save(Huiswerkopdracht huiswerkopdracht) {
 		return huiswerkopdrachtRepository.save(huiswerkopdracht);
 	}
 

@@ -28,7 +28,7 @@ public class MuziekstukEndpoint {
 	private MuziekstukService muziekstukService;
 	
 	/**
-	 * Cre&euml;er een nieuw stuk Muziekstuk.
+	 * Cre&euml;er een nieuw Muziekstuk.
 	 * @param 	muziekstuk Cre&euml;ren van nieuw Muziekstuk.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 			Id van opgeslagen muziekstuk wordt als text_plain teruggegeven.
@@ -37,9 +37,9 @@ public class MuziekstukEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postMuziekstuk(Muziekstuk muziekstuk){
-		System.out.println("pre@POST: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
+		System.out.println("Muziekstuk - pre@POST: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 		Muziekstuk result = muziekstukService.save(muziekstuk);
-		System.out.println("@POST: " + result.getId() + " - " + result.getOmschrijving());
+		System.out.println("Muziekstuk - @POST: " + result.getId() + " - " + result.getOmschrijving());
 		return Response.accepted(result.getId()).build();
 	}
 
@@ -50,16 +50,16 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)<br>
 	 */	
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_XML)
 	@Path("{id}/xml")
 	public Response postXMLtoMuziekstukById(@PathParam("id") Long id, String xml) {
-		System.out.println("pre@POST-XML: id provided: " + id);
+		System.out.println("Muziekstuk - pre@POST-XML: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		if (muziekstuk == null) {
 			return Response.noContent().build();
 		} else {
-			System.out.println("@POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
+			System.out.println("Muziekstuk - @POST-XML: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 			muziekstuk.setXml(xml);
 			this.muziekstukService.save(muziekstuk);
 			return Response.accepted().build();
@@ -73,23 +73,23 @@ public class MuziekstukEndpoint {
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)<br>
 	 */	
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/img")
 	public Response postImgtoMuziekstukById(@PathParam("id") Long id, byte[] img) {
-		System.out.println("pre@POST-img: id provided: " + id);
+		System.out.println("Muziekstuk - pre@POST-img: id provided: " + id);
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		if (muziekstuk == null) {
 			return Response.noContent().build();
 		} else {
-			System.out.println("@POST-img: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
+			System.out.println("Muziekstuk - @POST-img: " + muziekstuk.getId() + " - " + muziekstuk.getOmschrijving());
 			muziekstuk.setPictogram(img);
 			this.muziekstukService.save(muziekstuk);
 			return Response.accepted().build();
 		}
 	}
 
-	@POST
+	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Path("{id}/mp3")
 	public Response postMP3toMuziekstukById(@PathParam("id") Long id, byte[] mp3) {
@@ -105,15 +105,16 @@ public class MuziekstukEndpoint {
 	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
 	 * @return 	Code 200 (OK)<br>
 	 * 		 	Code 204 (No Content)<br>
-	 * 			Opgevraagd Muziekstuk wordt (zonder XML, Pictogram 	&amp; MP3) als JSON objecten teruggegeven.
+	 * 			Opgevraagd Muziekstuk wordt (zonder XML, Pictogram 	&amp; MP3) als JSON object teruggegeven.
 	 */	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response getMuziekstukkById(@PathParam("id") Long id ) {
+		System.out.println("Muziekstuk - pre@GET: (" + id + ")");
 		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
 		if (muziekstuk == null) {
+			System.out.println("Muziekstuk - Id " + id + " bestaat niet.");
 			return Response.noContent().build();
 		} else {
 			MuziekstukModelBasic result = new MuziekstukModelBasic(muziekstuk);
@@ -129,13 +130,13 @@ public class MuziekstukEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listMuziekstuk(){
-		System.out.println("@GET: Got the list!");
+		System.out.println("Muziekstuk - @GET: Got the list!");
 		Iterable <Muziekstuk> muziekstukken = muziekstukService.findAll();
 		ArrayList <MuziekstukModelBasic> result = new ArrayList<>();
 		for (Muziekstuk muziekstuk: muziekstukken) {
 			result.add(new MuziekstukModelBasic(muziekstuk));
 		}
-		System.out.println("@GET: Size ArrayList met muziekstukken (Model): " + result.size());
+		System.out.println("Muziekstuk - @GET: Size ArrayList met muziekstukken (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
@@ -144,7 +145,7 @@ public class MuziekstukEndpoint {
 	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
 	 * @return 	Code 200 (OK)<br>
 	 * 		 	Code 204 (No Content)<br>
-	 * 			XML bestand van Muziekstuk wordt teruggegeven in text_xml vorm
+	 * 			XML bestand van Muziekstuk wordt teruggegeven in text_xml vorm.
 	 */	
 	@GET
 	@Produces(MediaType.TEXT_XML)
@@ -163,7 +164,7 @@ public class MuziekstukEndpoint {
 	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
 	 * @return 	Code 200 (OK)<br>
 	 * 		 	Code 204 (No Content)<br>
-	 * 			Pictogram van Muziekstuk wordt teruggegeven in base64 codering
+	 * 			Pictogram van Muziekstuk wordt teruggegeven in base64 codering.
 	 */	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -188,9 +189,10 @@ public class MuziekstukEndpoint {
 	@DELETE
 	@Path("{id}")
 	public Response deleteMuziekstukById(@PathParam("id") Long id){
-		System.out.println("pre@DELETE: id provided: " + id);
+		System.out.println("Muziekstuk - pre@DELETE: id provided: " + id);
 		Muziekstuk result = this.muziekstukService.findById(id);
 		if (result == null) {
+			System.out.println("Muziekstuk - Id " + id + " bestaat niet.");
 			return Response.noContent().build();
 		} else {
 			this.muziekstukService.deleteById(id);

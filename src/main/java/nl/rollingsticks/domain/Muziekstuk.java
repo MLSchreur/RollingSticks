@@ -88,4 +88,29 @@ public class Muziekstuk {
 	public void setPictogram(byte[] pictogram) {
 		this.pictogram = pictogram;
 	}
+	
+	/**
+	 * Deze methode overrides de standaard equals methode, zodat 
+	 * twee objecten gelijk zijn, wanneer ze van dezelfde class zijn
+	 * en hun id gelijk is.
+	 * @param obj Het object dat vergeleken moet worden op gelijkheid.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		// standaard vergelijkingen/voorwaarden
+		if (this == obj) return true;
+		if (obj == null) return false;
+		// Classes ongelijk -> nooit gelijk
+		if (this.getClass() == obj.getClass()) {
+			// Tot dus ver alles goed, dus tijd om te gaan casten naar Muziekstuk en de id's te gaan vergelijken
+			Muziekstuk vergelijk = (Muziekstuk)obj;
+			if (this.id == vergelijk.id) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 }
