@@ -132,7 +132,7 @@ public class MuziekstukEndpoint {
 		for (Muziekstuk muziekstuk: muziekstukken) {
 			result.add(new MuziekstukModelBasic(muziekstuk));
 		}
-		System.out.println("Size ArrayList met muziekstukken (Model): " + result.size());
+		System.out.println("@GET: Size ArrayList met muziekstukken (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
@@ -172,18 +172,25 @@ public class MuziekstukEndpoint {
 		}
 	}	
 	
+	// !!!! Zodra de mp3 ook geïmplementeerd wordt en deze op de fileserver komt, moet de Delete hierop worden aangepast.
+	// Wordt de mp3 als Base64 in de database gezet, dan is er geen aanpassing nodig.
 	/**
-	 * Opvragen van pictogram van Muziekstuk (id).
-	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
-	 * @return 	Code 200 (OK)
+	 * Verwijderen van het opgegeven muziekstuk (id).
+	 * @param 	id 	id van het te verwijderen muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 202 (Accepted)
 	 * @return 	Code 204 (No Content)
 	 */	
 	@DELETE
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response deleteMuziekstukById(@PathParam("id") Long id){
-		this.muziekstukService.deleteById(id);
-		return Response.accepted().build();
+		System.out.println("pre@DELETE: id provided: " + id);
+		Muziekstuk result = this.muziekstukService.findById(id);
+		if (result == null) {
+			return Response.noContent().build();
+		} else {
+			this.muziekstukService.deleteById(id);
+			return Response.accepted().build();
+		}
 	}
 
 	@PUT
