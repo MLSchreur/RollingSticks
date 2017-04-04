@@ -172,6 +172,12 @@ public class MuziekstukEndpoint {
 		}
 	}	
 	
+	/**
+	 * Opvragen van pictogram van Muziekstuk (id).
+	 * @param 	id 	id van het muziekstuk wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)
+	 * @return 	Code 204 (No Content)
+	 */	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
@@ -188,43 +194,5 @@ public class MuziekstukEndpoint {
 		Muziekstuk result = muziekstukService.save(muziekstuk);
 		return Response.accepted(result).build();
 	}
-	
-	
-//
-//	//////////////////////
-//
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("{id}/artiest")
-//	public Response getArtiestById(@PathParam("id") Long id ) {
-//		Muziekstuk result = this.muziekstukService.findById(id);
-//		return Response.ok(result).build();
-//	}
-//	@POST
-//	@Consumes(MediaType.TEXT_PLAIN)
-//	@Path("{id}/artiest")
-//	public Response postArtiestById(@PathParam("id") Long id, String artiest) {
-//		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
-//		muziekstuk.setArtiest(artiest);
-//		this.muziekstukService.save(muziekstuk);
-//		return Response.accepted().build();
-//	}
-//
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("{id}/omschrijving")
-//	public Response getArtiestById(@PathParam("id") Long id ) {
-//		Muziekstuk result = this.muziekstukService.findById(id);
-//		return Response.ok(result).build();
-//	}
-//	@POST
-//	@Consumes(MediaType.TEXT_PLAIN)
-//	@Path("{id}/omschrijving")
-//	public Response postOmschrijvingById(@PathParam("id") Long id, String omschrijving) {
-//		Muziekstuk muziekstuk = this.muziekstukService.findById(id);
-//		muziekstuk.setOmschrijving(omschrijving);
-//		this.muziekstukService.save(muziekstuk);
-//		return Response.accepted().build();
-//	}
 }
 
