@@ -15,8 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Huiswerkopdracht;
-import nl.rollingsticks.domain.model.MuziekstukModelBasic;
+import nl.rollingsticks.domain.Muziekstuk;
 import nl.rollingsticks.persistence.HuiswerkopdrachtService;
+import nl.rollingsticks.persistence.MuziekstukService;
 
 @Path("huiswerkopdracht")
 @Component
@@ -24,6 +25,9 @@ public class HuiswerkopdrachtEndpoint {
 	
 	@Autowired
 	private HuiswerkopdrachtService huiswerkopdrachtService;
+	
+	@Autowired
+	private MuziekstukService muziekstukService;
 	
 	/**
 	 * Cre&euml;er een nieuwe Huiswerkopdracht.
@@ -33,12 +37,12 @@ public class HuiswerkopdrachtEndpoint {
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postHuiswerkopdracht(Huiswerkopdracht huiswerkopdracht){
 		System.out.println("Huiswerk - pre@POST: " + huiswerkopdracht.getId() + " - " + huiswerkopdracht.getNotitie());
 		Huiswerkopdracht result = huiswerkopdrachtService.save(huiswerkopdracht);
 		System.out.println("Huiswerk - @POST: " + huiswerkopdracht.getId() + " - " + huiswerkopdracht.getNotitie());
-		return Response.accepted(result).build();
+		return Response.accepted(result.getId()).build();
 	}
 	
 	/**
@@ -94,6 +98,30 @@ public class HuiswerkopdrachtEndpoint {
 		} else {
 			this.huiswerkopdrachtService.deleteById(id);
 			return Response.accepted().build();
+		}
+	}
+
+	/**
+	 * Toevoegen van Muziekstuk aan opgegeven Huiswerkopdracht (id).
+	 * @param 	id 	Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/muziekstuk")
+	public Response addMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, Muziekstuk muziekstuk) {
+		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id);
+		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
+		if (huiswerkopdracht == null) {
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
+		} else {
+			Muziekstuk newMuziekstuk = this.muziekstukService.save(muziekstuk);
+			huiswerkopdracht.addMuziekstukToMuziekstukken(newMuziekstuk);
+			huiswerkopdrachtService.save(huiswerkopdracht);
+			return Response.accepted(newMuziekstuk.getId()).build();
 		}
 	}
 
