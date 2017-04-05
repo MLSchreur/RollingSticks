@@ -178,9 +178,12 @@ public class HuiswerkopdrachtEndpoint {
 	 * @param 	id 			Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
 	 * @param	muziekstuk	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
 	 * @return 	Code 202 (Accepted)<br>
-	 * 		 	Code 204 (No Content)
+	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 3 = Muziekstuk met opgegeven id is al gekoppeld aan de Huiswerkopdracht.
 	 */	
 	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/{muziekstukId}")
 	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, @PathParam("muziekstukId") Long muziekstukId) {
 		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id + " (" + muziekstukId + ")");
@@ -188,17 +191,22 @@ public class HuiswerkopdrachtEndpoint {
 		if (huiswerkopdracht != null) {
 			Muziekstuk muziekstuk = this.muziekstukService.findById(muziekstukId);
 			if (muziekstuk != null) {
-				// nog een check of hij al niet toevallig eerder is toegevoegd!! 
-				huiswerkopdracht.addMuziekstukToMuziekstukken(muziekstuk);
-				huiswerkopdrachtService.save(huiswerkopdracht);
-				return Response.accepted().build();
+				if (!huiswerkopdracht.isLinkedMuziekstuk(muziekstuk)) {
+					System.out.println("Huiswerk - @PUT (Muziekstuk): id provided: " + id + " (" + muziekstukId + ")");
+					huiswerkopdracht.addMuziekstukToMuziekstukken(muziekstuk);
+					huiswerkopdrachtService.save(huiswerkopdracht);
+					return Response.accepted().build();
+				} else {
+					System.out.println("Muziekstuk - Id " + muziekstukId + " is al gekoppeld.");
+					return Response.status(406).entity("3").build();
+				}
 			} else {
 				System.out.println("Muziekstuk - Id " + muziekstukId + " bestaat niet.");
-				return Response.noContent().build();
+				return Response.status(406).entity("2").build();
 			}
 		} else {
 			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
+			return Response.status(406).entity("1").build();
 		}
 	}
 

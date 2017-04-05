@@ -31,7 +31,7 @@ public class Huiswerkopdracht {
 	private Date lesDatum;
 	private String notitie;
 
-	@OneToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
 	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
 
@@ -67,11 +67,20 @@ public class Huiswerkopdracht {
 		this.muziekstukken = muziekstukken;
 	}
 
-	public void addMuziekstukToMuziekstukken (Muziekstuk muziekstuk) {
+	public void addMuziekstukToMuziekstukken(Muziekstuk muziekstuk) {
 		this.muziekstukken.add(muziekstuk);
 	}
 	
-	public void removerMuziekstukFromMuziekstukken (Muziekstuk muziekstuk) {
+	public void removerMuziekstukFromMuziekstukken(Muziekstuk muziekstuk) {
 		this.muziekstukken.remove(muziekstuk);
+	}
+	
+	public boolean isLinkedMuziekstuk(Muziekstuk linkedMuziekstuk) {
+		for (Muziekstuk muziekstuk : muziekstukken) {
+			if (muziekstuk.getId() == linkedMuziekstuk.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
