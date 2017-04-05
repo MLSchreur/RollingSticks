@@ -37,25 +37,16 @@ public class DocentEndpoint {
 		return Response.ok(result).build();
 	}
 	
-	////////CH
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/gebruikersnaam")
-	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
-		Docent docent = this.docentService.findById(id);
-		docent.setGebruikersnaam(gebruikersnaam);
-		this.docentService.save(docent);
-		return Response.accepted().build();
-	}
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/wachtwoord")
-	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
-		Docent docent = this.docentService.findById(id);
-		docent.setWachtwoord(wachtwoord);
-		this.docentService.save(docent);
-		return Response.accepted().build();
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Response getDocentById(@PathParam("id") Long id){
+		Docent docent = docentService.findById(id);
+		if (docent == null){
+			return Response.noContent().build();
+		} else {
+			return Response.ok(docent).build();
+		}
 	}
 }
 
