@@ -76,24 +76,4 @@ public class LeerlingEndpoint {
 		return Response.accepted(result).build();
 	}
 	
-	////////CH
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/gebruikersnaam")
-	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setGebruikersnaam(gebruikersnaam);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/wachtwoord")
-	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setWachtwoord(wachtwoord);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
 }

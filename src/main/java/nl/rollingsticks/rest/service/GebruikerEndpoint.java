@@ -55,6 +55,12 @@ public class GebruikerEndpoint {
 		for (Leerling leerling : leerlingen) {
 			resultLeerlingen.add(new LeerlingModelBasic(leerling));
 		}
-		return Response.ok(resultLeerlingen).build();
+		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
+		
+		ArrayList <Gebruiker> gebruikers = new ArrayList<>();
+		for (int i = 0; i < docenten.size(); i++) {
+			gebruikers.add(docenten.get(i));
+		}
+		return Response.ok(gebruikers).build();
 	}
 }
