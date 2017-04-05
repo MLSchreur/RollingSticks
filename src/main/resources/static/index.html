@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello Rolling Sticks</title>
+	<style type="text/css">
+		ul {
+			list-style-type: none;
+			border: 2px solid black;
+			border-radius: 3px;
+			padding: 5px;
+			width: 360px;
+		}
+
+	</style>
+	<script type="text/javascript">
+		
+		//Load all tekst from database
+		window.onload = function () {
+			getAllTekst();
+		}
+
+		var xhttp = new XMLHttpRequest();
+
+		//POST new tekst-object
+		function newTekst(){
+			var tekstInput = document.getElementById("tekstInput").value;
+
+			var tekst = {"tekst":tekstInput};
+			var url = "http://rollingsticks.test.carpago.nl/api/tekst";
+			xhttp.open("POST", url);
+			xhttp.setRequestHeader ("Content-Type", "application/json");
+			xhttp.onreadystatechange = function() {
+				window.location.reload();
+			};
+			xhttp.send(JSON.stringify(tekst));
+		}
+
+		//GET all tekst-objects
+		function getAllTekst(){
+        	var url = "http://rollingsticks.test.carpago.nl/api/tekst";
+            
+            xhttp.open("GET", url);
+            xhttp.setRequestHeader ("Content-Type", "application/json");
+            xhttp.onreadystatechange = function() {
+	            if (xhttp.readyState == 0 || xhttp.readyState == 4) {
+	            	
+	            	var tekst = JSON.parse(xhttp.responseText);
+		            var list = document.getElementById("showAll");
+
+	                for (var i = 0; i < tekst.length; i++) {
+	                	var newLi = document.createElement("li");
+	                	var line = tekst[i].id + " " +tekst[i].tekst;
+	                	newLi.innerHTML = line;
+	                	list.appendChild(newLi);
+	                }
+	           	}   
+        	}
+            xhttp.send();
+        }
+
+        //GET tekst by ID
+        function getTekst(){
+        	var id = document.getElementById("getId").value;
+        	
+			var url = "http://rollingsticks.test.carpago.nl/api/tekst";
+            xhttp.open("GET", url + "/" + id);
+            xhttp.setRequestHeader ("Content-Type", "application/json");
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 0 || xhttp.readyState == 4) {
+                    var tekst = JSON.parse(xhttp.responseText);
+                    document.getElementById("idOfTekst").value = tekst.id;
+                    document.getElementById("tekstInput").value = tekst.tekst;
+                    
+                }
+            };
+            xhttp.send();
+        }
+
+        //PUT tekst-object by ID
+        function putTekst(){
+			var id = document.getElementById("idOfTekst").value;
+			var tekstInput = document.getElementById("tekstInput").value;
+			console.log(id + " " + tekstInput);
+			var tekst = { "id":id , "tekst":tekstInput };
+
+			var url = "http://rollingsticks.test.carpago.nl/api/tekst";
+			xhttp.open("PUT", url);
+			xhttp.setRequestHeader ("Content-Type", "application/json");
+			xhttp.onreadystatechange = function() {
+				window.location.reload();
+			};
+			xhttp.send(JSON.stringify(tekst));
+		}
+
+		//Delete tekst-object by ID
+		function deleteTekst() {
+			var id = document.getElementById("idOfTekst").value;
+
+			var url = "http://rollingsticks.test.carpago.nl/api/tekst";
+            xhttp.open("DELETE", url + "/" + id);
+            xhttp.setRequestHeader ("Content-Type", "application/json");
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 0 || xhttp.readyState == 4) {
+                    window.location.reload();
+                    
+                }
+            };
+            xhttp.send();
+		}
+
+
+	</script>
+</head>
+<body>
+<div>
+	<h3>Opgeslagen tekst:</h3>
+	<ul id="showAll"></ul>
+	</div>
+
+	<div id="dataTerug"></div>
+	<input type="number" id="idOfTekst" disabled="disabled">
+	<input type="text" id="tekstInput" placeholder="Voer tekst in">
+	<br>
+	<button onclick="newTekst()">Opslaan</button>
+	<button onclick="putTekst()">Wijzigen</button>
+	<button onclick="deleteTekst()">Verwijderen</button>
+	<br><br>
+	<input type="number" id="getId">
+	<button onclick="getTekst()">Selecteer id</button><br>
+	<br>
+	<a href="./javadoc/index.html">Javadoc (Eclipse)</a><br>
+	<a href="./javadocs/index.html">Javadoc (Maven)</a><br>
+	<img src="RollingSticks_Klassendiagram.png" style="width:1000px">
+	
+</body>
+</html>

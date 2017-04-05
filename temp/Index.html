@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello Rolling Sticks</title>
+	<script type="text/javascript">
+		var xhttp = new XMLHttpRequest();
+		function newTekst(){
+			var tekstInput = document.getElementById("tekstInput").value;
+
+			var tekst = {"tekst":tekstInput};
+			var url = "http://localhost:8081/api/tekst";
+			xhttp.open("POST", url);
+			xhttp.setRequestHeader ("Content-Type", "application/json");
+			xhttp.onreadystatechange = function() {
+				window.location.reload();
+			};
+			xhttp.send(JSON.stringify(tekst));
+		}
+	</script>
+</head>
+<body>
+	<input type="text" id="tekstInput" placeholder="Voer tekst in">
+	<button onclick="newTekst()">
+		tekst opslaan
+	</button>
+</body>
+</html>
