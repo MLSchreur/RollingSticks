@@ -164,6 +164,31 @@ public class HuiswerkopdrachtEndpoint {
 		}
 	}
 
+	/**
+	 * Toevoegen van een <b>bestaand</b> Muziekstuk aan opgegeven Huiswerkopdracht (id).
+	 * @param 	id 			Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @param	muziekstuk	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/{muziekstukId}")
+	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, Muziekstuk muziekstuk) {
+		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id);
+		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
+		if (huiswerkopdracht == null) {
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
+		} else {
+			Muziekstuk newMuziekstuk = this.muziekstukService.save(muziekstuk);
+			huiswerkopdracht.addMuziekstukToMuziekstukken(newMuziekstuk);
+			huiswerkopdrachtService.save(huiswerkopdracht);
+			return Response.accepted(newMuziekstuk.getId()).build();
+		}
+	}
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
