@@ -20,6 +20,7 @@ import nl.rollingsticks.domain.Docent;
 import nl.rollingsticks.domain.Gebruiker;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.Muziekstuk;
+import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.domain.model.MuziekstukModelBasic;
 import nl.rollingsticks.persistence.DocentService;
 import nl.rollingsticks.persistence.LeerlingService;
@@ -50,13 +51,10 @@ public class GebruikerEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listGebruikers() {
 		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
-		List <Docent> docenten = (ArrayList <Docent>)docentService.findAll();
-		ArrayList <Gebruiker> result = new ArrayList<>();
-		result.addAll(leerlingen);
-		result.addAll(docenten);
-		for (Gebruiker gebruiker : result) {
-			System.out.println(gebruiker.getVoornaam());
+		List <LeerlingModelBasic> resultLeerlingen = new ArrayList<>();
+		for (Leerling leerling : leerlingen) {
+			resultLeerlingen.add(new LeerlingModelBasic(leerling));
 		}
-		return Response.ok(result).build();
+		return Response.ok(resultLeerlingen).build();
 	}
 }

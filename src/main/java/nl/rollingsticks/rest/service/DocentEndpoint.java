@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Docent;
+import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.persistence.DocentService;
 
 
@@ -35,6 +36,18 @@ public class DocentEndpoint {
 	public Response listDocent(){
 		Iterable <Docent> result = docentService.findAll();
 		return Response.ok(result).build();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Response getDocentById(@PathParam("id") Long id){
+		Docent docent = docentService.findById(id);
+		if (docent == null){
+			return Response.noContent().build();
+		} else {
+			return Response.ok(docent).build();
+		}
 	}
 	
 	////////CH
