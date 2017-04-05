@@ -65,4 +65,12 @@ public class Huiswerkopdracht {
 	public void setNotitie(String notitie) {
 		this.notitie = notitie;
 	}
+	
+	public void addMuziekstukToMuziekstukken (Muziekstuk muziekstuk) {
+		this.muziekstukken.add(muziekstuk);
+	}
+	
+	public void removerMuziekstukFromMuziekstukken (Muziekstuk muziekstuk) {
+		this.muziekstukken.remove(muziekstuk);
+	}
 }

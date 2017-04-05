@@ -3,7 +3,7 @@ package nl.rollingsticks.domain.model;
 import nl.rollingsticks.domain.Muziekstuk;
 
 /**
- * Basis Model voor muziekstukken
+ * Basis Model voor Muziekstukken
  * @author ProgramIT
  * @version 0.1.0
  * @since 2017-03-29
