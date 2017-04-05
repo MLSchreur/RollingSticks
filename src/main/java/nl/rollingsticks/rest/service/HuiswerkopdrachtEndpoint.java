@@ -56,7 +56,7 @@ public class HuiswerkopdrachtEndpoint {
 	 * 		 	Code 204 (No Content)<br>
 	 * 			Opgevraagde Huiswerkopdracht wordt als JSON object teruggegeven.<br>
 	 * 			Muziekstukken kunnen via api's van muziekstuk verder opgevraagd worden.<br>
-	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3, ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
+	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3 ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
 	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -175,8 +175,8 @@ public class HuiswerkopdrachtEndpoint {
 
 	/**
 	 * Toevoegen van een <b>bestaand</b> Muziekstuk aan opgegeven Huiswerkopdracht (id).
-	 * @param 	id 			Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
-	 * @param	muziekstuk	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
+	 * @param 	id 				Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @param	muziekstukId	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
 	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk met opgegeven id bestaat niet.<br>
