@@ -28,12 +28,12 @@ public class Huiswerkopdracht {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
-	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
-
 	private Date lesDatum;
 	private String notitie;
+
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
 
 	public long getId() {
 		return id;
@@ -41,14 +41,6 @@ public class Huiswerkopdracht {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public List<Muziekstuk> getMuziekstukken() {
-		return muziekstukken;
-	}
-
-	public void setMuziekstukken(List<Muziekstuk> muziekstukken) {
-		this.muziekstukken = muziekstukken;
 	}
 
 	public Date getLesDatum() {
@@ -67,6 +59,14 @@ public class Huiswerkopdracht {
 		this.notitie = notitie;
 	}
 	
+	public List<Muziekstuk> getMuziekstukken() {
+		return muziekstukken;
+	}
+
+	public void setMuziekstukken(List<Muziekstuk> muziekstukken) {
+		this.muziekstukken = muziekstukken;
+	}
+
 	public void addMuziekstukToMuziekstukken (Muziekstuk muziekstuk) {
 		this.muziekstukken.add(muziekstuk);
 	}

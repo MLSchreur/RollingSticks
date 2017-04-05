@@ -181,20 +181,24 @@ public class HuiswerkopdrachtEndpoint {
 	 * 		 	Code 204 (No Content)
 	 */	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/{muziekstukId}")
-	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, Muziekstuk muziekstuk) {
-		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id);
+	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, @PathParam("muziekstukId") Long muziekstukId) {
+		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id + " (" + muziekstukId + ")");
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
-		if (huiswerkopdracht == null) {
+		if (huiswerkopdracht != null) {
+			Muziekstuk muziekstuk = this.muziekstukService.findById(muziekstukId);
+			if (muziekstuk != null) {
+				// nog een check of hij al niet toevallig eerder is toegevoegd!! 
+				huiswerkopdracht.addMuziekstukToMuziekstukken(muziekstuk);
+				huiswerkopdrachtService.save(huiswerkopdracht);
+				return Response.accepted().build();
+			} else {
+				System.out.println("Muziekstuk - Id " + muziekstukId + " bestaat niet.");
+				return Response.noContent().build();
+			}
+		} else {
 			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
 			return Response.noContent().build();
-		} else {
-			Muziekstuk newMuziekstuk = this.muziekstukService.save(muziekstuk);
-			huiswerkopdracht.addMuziekstukToMuziekstukken(newMuziekstuk);
-			huiswerkopdrachtService.save(huiswerkopdracht);
-			return Response.accepted(newMuziekstuk.getId()).build();
 		}
 	}
 
