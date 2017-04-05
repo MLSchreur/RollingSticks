@@ -44,8 +44,7 @@ public class LoginEndpoint {
 	
 	/**
 	 * Controleren van gebruikersnaam en wachtwoord bij inloggen
-	 * @param	gebruikersnaam	gebruikersnaam wordt uit een JSON-object gehaald
-	 * @param 	wachtwoord 		wachtwoord wordt uit een JSON-object gehaald
+	 * @param	gebruikerValidatie	gebruikersnaam en wachtwoord worden uit een JSON-object van type Gebruiker gehaald
 	 * @return 	Code 200 (OK) - 1 = Docent<br>
 	 * 			Code 200 (OK) - 2 = Leerling<br>
 	 * 		 	Code 204 (No Content)<br>
