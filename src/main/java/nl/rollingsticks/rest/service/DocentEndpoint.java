@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Docent;
-import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.persistence.DocentService;
 
 

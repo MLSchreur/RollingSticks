@@ -73,8 +73,10 @@ public class Gebruiker {
 		this.wachtwoord = wachtwoord;
 	}
 	
-	public boolean checkWachtwoord(String gebruikersnaam, String wachtwoord){
-		if(this.gebruikersnaam.equals(gebruikersnaam) && this.wachtwoord.equals(wachtwoord)){		
+	public boolean checkWachtwoord(Gebruiker gebruikerValidatie){
+		if(this.wachtwoord.equals(gebruikerValidatie.wachtwoord)){		
+			System.out.println(this.wachtwoord);
+			System.out.println(gebruikerValidatie.wachtwoord);
 			return true;
 		} else {
 			return false;

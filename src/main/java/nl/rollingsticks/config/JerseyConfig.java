@@ -7,13 +7,11 @@ import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.rest.service.BladmuziekEndpoint;
 import nl.rollingsticks.rest.service.LeerlingEndpoint;
-
+import nl.rollingsticks.rest.service.LoginEndpoint;
 import nl.rollingsticks.rest.service.MuziekstukEndpoint;
 import nl.rollingsticks.rest.service.GroepEndpoint;
 import nl.rollingsticks.rest.service.HuiswerkopdrachtEndpoint;
-
 import nl.rollingsticks.rest.service.DocentEndpoint;
-import nl.rollingsticks.rest.service.GebruikerEndpoint;
 import nl.rollingsticks.rest.service.TekstEndpoint;
 
 @Component
@@ -27,6 +25,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(HuiswerkopdrachtEndpoint.class);
 		register(LeerlingEndpoint.class);
 		register(DocentEndpoint.class);
-		register(GebruikerEndpoint.class);
+		register(LoginEndpoint.class);
 	}
 }
