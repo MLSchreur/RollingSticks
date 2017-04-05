@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Fetch;
@@ -27,7 +28,7 @@ public class Huiswerkopdracht {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
 	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
 
