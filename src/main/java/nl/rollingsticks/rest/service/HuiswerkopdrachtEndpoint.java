@@ -56,7 +56,7 @@ public class HuiswerkopdrachtEndpoint {
 	 * 		 	Code 204 (No Content)<br>
 	 * 			Opgevraagde Huiswerkopdracht wordt als JSON object teruggegeven.<br>
 	 * 			Muziekstukken kunnen via api's van muziekstuk verder opgevraagd worden.<br>
-	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3, ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
+	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3 ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
 	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -175,26 +175,38 @@ public class HuiswerkopdrachtEndpoint {
 
 	/**
 	 * Toevoegen van een <b>bestaand</b> Muziekstuk aan opgegeven Huiswerkopdracht (id).
-	 * @param 	id 			Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
-	 * @param	muziekstuk	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
+	 * @param 	id 				Id van de Huiswerkopdracht waar een Muziekstuk aan toegevoegd moet worden.
+	 * @param	muziekstukId	Muziekstuk dat opgeslagen en gekoppeld moet worden aan de Huiswerkopdracht (id).
 	 * @return 	Code 202 (Accepted)<br>
-	 * 		 	Code 204 (No Content)
+	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 3 = Muziekstuk met opgegeven id is al gekoppeld aan de Huiswerkopdracht.
 	 */	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/{muziekstukId}")
-	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, Muziekstuk muziekstuk) {
-		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id);
+	public Response addBestaandMuziekstukToHuiswerkopdracht(@PathParam("id") Long id, @PathParam("muziekstukId") Long muziekstukId) {
+		System.out.println("Huiswerk - pre@PUT (Muziekstuk): id provided: " + id + " (" + muziekstukId + ")");
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
-		if (huiswerkopdracht == null) {
-			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
+		if (huiswerkopdracht != null) {
+			Muziekstuk muziekstuk = this.muziekstukService.findById(muziekstukId);
+			if (muziekstuk != null) {
+				if (!huiswerkopdracht.isLinkedMuziekstuk(muziekstuk)) {
+					System.out.println("Huiswerk - @PUT (Muziekstuk): id provided: " + id + " (" + muziekstukId + ")");
+					huiswerkopdracht.addMuziekstukToMuziekstukken(muziekstuk);
+					huiswerkopdrachtService.save(huiswerkopdracht);
+					return Response.accepted().build();
+				} else {
+					System.out.println("Muziekstuk - Id " + muziekstukId + " is al gekoppeld.");
+					return Response.status(406).entity("3").build();
+				}
+			} else {
+				System.out.println("Muziekstuk - Id " + muziekstukId + " bestaat niet.");
+				return Response.status(406).entity("2").build();
+			}
 		} else {
-			Muziekstuk newMuziekstuk = this.muziekstukService.save(muziekstuk);
-			huiswerkopdracht.addMuziekstukToMuziekstukken(newMuziekstuk);
-			huiswerkopdrachtService.save(huiswerkopdracht);
-			return Response.accepted(newMuziekstuk.getId()).build();
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.status(406).entity("1").build();
 		}
 	}
 
