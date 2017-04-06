@@ -34,6 +34,7 @@ public class LeerlingModelBasic {
 	public String getGebruikersnaam(){
 		return this.leerling.getGebruikersnaam();
 	}
+	
 	public List<Long> getGroepenById(){
 		List<Long> groepIds = new ArrayList<>();
 		for (int i = 0; i < this.leerling.getGroepen().size(); i++) {
