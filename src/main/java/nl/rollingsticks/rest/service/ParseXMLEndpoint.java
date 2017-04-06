@@ -8,6 +8,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -16,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.core.style.ValueStyler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,6 +37,8 @@ public class ParseXMLEndpoint {
 	//		
 	//		@Autowired
 	//		private DocentService docentService;
+	
+	List<Instrument> instrumenten = new ArrayList<>();
 
 	/**
 	 * Parsen van XML bestand
@@ -51,47 +56,67 @@ public class ParseXMLEndpoint {
 
 			DefaultHandler handler = new DefaultHandler() {
 
-				boolean isTitle =		false;
-				boolean isCredit =		false;
-				boolean isMode =		false;
-				boolean isBeats =		false;
-				boolean isBeatType = 	false;
+				// algemene informatie
+				boolean isTitle =				false;
+				boolean isCredit =				false;
+				boolean isMode =				false;
+				boolean isBeats =				false;
+				boolean isBeatType = 			false;
 				
-				boolean isMeasure = 	false;
+				// overzicht druminstrumenten
+				boolean isScoreInstrument =		false;
+				boolean isInstrumentNaam = 		false;
+				String	instrumentIndex =		null;
 				
-				boolean isNote = 	false;
-				boolean isLength = 	false;
-				boolean isStem = 	false;
-				boolean isBeam = 	false;
-				boolean isChord = 	false;
-				boolean isInstrument = 	false;
-				//boolean isHeigth = 	false;
+				// maat
+				boolean isMeasure = 			false;
+				
+				// noot + informatie
+				boolean isNote = 				false;
+				boolean isLength = 				false;
+				boolean isStem = 				false;
+				boolean isBeam = 				false;
+				boolean isChord = 				false;
+				boolean isInstrument = 			false;
+				//boolean isHeigth = 			false;
 
 				public void startElement(String uri, String localName, String qName,
 						Attributes attributes) throws SAXException {
 
 					switch(qName.toLowerCase()) {
-					case "movement-title":	isTitle = true; break;
-					case "credit-words":	isCredit = true; break;
-					case "mode":			isMode = true; break;
-					case "beats":			isBeats = true; break;
-					case "beat-type":		isBeatType = true; break;
+					case "movement-title":		isTitle = true; break;
+					case "credit-words":		isCredit = true; break;
+					case "mode":				isMode = true; break;
+					case "beats":				isBeats = true; break;
+					case "beat-type":			isBeatType = true; break;
 
-					case "measure":			isMeasure = true; break;
+					case "measure":				isMeasure = true; break;
 
-					case "note":			isNote = true; break;
-					case "type":			isLength = true; break;
-					case "stem":			isStem = true; break;
-					case "beam":			isBeam = true; break;
-					case "chord":			isChord = true; break;
-					case "instrument":		isInstrument = true; break;
-					//case "instrument geen nodig":			isHeigth = true; break;
+					case "note":				isNote = true; break;
+					case "type":				isLength = true; break;
+					case "stem":				isStem = true; break;
+					case "beam":				isBeam = true; break;
+					case "chord":				isChord = true; break;
+					case "instrument":			isInstrument = true; break;
+					
+					case "score-instrument":	isScoreInstrument = true; break;
+					case "instrument-name":		isInstrumentNaam = true; break;
+					//case "instrument geen nodig voor heigth":			isHeigth = true; break;
 					}
 					
+					if (isScoreInstrument) {
+						instrumentIndex = attributes.getValue("id");
+						System.out.println("instrument index     : " + instrumentIndex);
+						isScoreInstrument = false;
+					}
+
+					// CODE UITBREIDEN
 					if (isInstrument) {
-						System.out.println("instrument           : " + attributes.getValue("id"));
+						String instrumentId = attributes.getValue("id");
+						System.out.println("instrument ID        : " + instrumentId + " - " + omzettenInstrumentId(instrumentId));
 						isInstrument = false;
 					}
+
 				}
 
 				public void endElement(String uri, String localName,
@@ -121,13 +146,21 @@ public class ParseXMLEndpoint {
 						if (length > 5) {
 							String creditWords = new String(ch, start, length);
 							if (creditWords.substring(0, 5).equals("Tempo")) {
-								System.out.println("Element              : " + "credit-words");
 								System.out.println("credit-words         : " + creditWords);
 								int tempo = Integer.parseInt(creditWords.substring(6));
 								System.out.println("Tempo                : " + tempo);
 							}
 						}
 						isCredit = false;
+					}
+
+					// InstrumentNaam
+					if (isInstrumentNaam) {
+						String instrumentNaam = new String(ch, start, length);
+						System.out.println("instrument naam      : " + new String(ch, start, length));
+						vastleggenInstrumentenIndex (instrumentIndex, instrumentNaam);
+						instrumentIndex = null;
+						isInstrumentNaam = false;
 					}
 
 					// Mode
@@ -162,9 +195,11 @@ public class ParseXMLEndpoint {
 						isNote = false;
 					}
 
+					// CODE UITBREIDEN
 					// Length
 					if (isLength) {
-						System.out.println("length/type          : " + new String(ch, start, length));
+						String lengthNote = new String(ch, start, length);
+						System.out.println("length/type          : " + lengthNote);
 						isLength = false;
 					}
 
@@ -189,6 +224,7 @@ public class ParseXMLEndpoint {
 				}
 			};
 
+			initInstrumenten(instrumenten);
 			// Documentatie van gekopieerd voorbeeld SAX Parser:
 			// https://www.mkyong.com/java/how-to-read-xml-file-in-java-sax-parser/
 			System.out.println("voor saxparser");
@@ -214,9 +250,82 @@ public class ParseXMLEndpoint {
 	// Foutmelding die je krijgt is:
 	// Server returned HTTP response code: 403 for URL: http://www.musicxml.org/dtds/partwise.dtd
 	
-	// Voorkomen door 
+	// Voorkomen door:
 	private String verwijderenDoctype (String xml) {
 		String xmlStart = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 		return xmlStart + xml.substring(178);
 	}
+	
+	private int omzettenLengteNoot (String lengthNote) {
+		switch (lengthNote.toLowerCase()) {
+		case "whole": 		return 1;
+		case "half": 		return 2;
+		case "quarter": 	return 4;
+		case "eighth": 		return 8;
+		case "16th": 		return 16;
+		case "32nd": 		return 32;
+		}
+		// Niets gevonden dan is er iets mis en geven we maar 0 terug. 
+		// Dit moet nog wel even netjes in de documentatie van de API vastgelegd wordt,
+		// zodat de mensen van de Frontend het ook snappen. ;-)
+		return 0;
+	}
+	
+	private String omzettenInstrumentId (String instrumentId) {
+		for (Instrument instrument : instrumenten) {
+//			if (instrument.instrumentId.equalsIgnoreCase(instrumentId)) {
+			if (instrumentId.equalsIgnoreCase(instrument.instrumentId)) {
+				return instrument.instrumentNaam;
+			}
+		}
+		// Niets gevonden dan is er iets mis en geven we maar deze tekst terug. 
+		// Even overleggen met Frontend wat we dan terug willen geven en vastleggen in de Javadocs.
+		return "Instrument onbekend";
+	}
+	
+	// methodes voor Instrumenten tabel (init & vastleggen vanuit XML)
+	private void initInstrumenten(List<Instrument> instrumenten) {
+		instrumenten.add(new Instrument("c6"));
+		instrumenten.add(new Instrument("b5"));
+		instrumenten.add(new Instrument("a5", "Crash Cymbal"));				// Crash Bekken
+		instrumenten.add(new Instrument("g5", "Ride%g Bell"));				// Hihat Voet ??
+		instrumenten.add(new Instrument("g5", "Hi-Hat%g Open"));			// Hihat Open
+		instrumenten.add(new Instrument("g5", "Hi-Hat%g Closed"));			// Hihat
+		instrumenten.add(new Instrument("f5", "Ride Cymbal"));				// Ride Bekken
+		instrumenten.add(new Instrument("e5", ""));							// Kleine Tom ??
+		instrumenten.add(new Instrument("d5", "Low Tom"));					// Grote Tom
+		instrumenten.add(new Instrument("c5", "Snare Drum"));				// Snare Drum
+		instrumenten.add(new Instrument("c5", "Snare%g Ghost Stroke"));		// Ghost Noot
+		instrumenten.add(new Instrument("c5", "Stick Click"));				// Rim
+		instrumenten.add(new Instrument("b4"));
+		instrumenten.add(new Instrument("a4"));
+		instrumenten.add(new Instrument("g4"));
+		instrumenten.add(new Instrument("f4", "Flloor Tom1"));				// Staande Tom
+		instrumenten.add(new Instrument("e4", "Bass Drum"));				// Base Drum
+		instrumenten.add(new Instrument("d4", "Hi-Hat@g Foot"));			// Hihat Voet ??
+																			// EZdrummer  ??
+	}
+	
+	private void vastleggenInstrumentenIndex (String instrumentIndex, String instrumentNaam) {
+		for (Instrument instrument : instrumenten) {
+			if (instrument.instrumentNaam.equalsIgnoreCase(instrumentNaam)) {
+				//System.out.println("** Match ***");
+				instrument.instrumentId = instrumentIndex;
+			}
+		}
+	}
+}
+
+class Instrument {
+	Instrument (String nootNaam) {
+		this(nootNaam, "");
+	}
+	Instrument (String nootNaam, String instrumentNaam) {
+		this.nootNaam = nootNaam;
+		this.instrumentNaam = instrumentNaam;
+	}
+	
+	String nootNaam;
+	String instrumentId;
+	String instrumentNaam;
 }
