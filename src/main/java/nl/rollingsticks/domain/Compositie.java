@@ -1,7 +1,14 @@
 package nl.rollingsticks.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 
-
+/**
+ * Compositie met maten
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
 
 public class Compositie {
 	
@@ -11,9 +18,15 @@ public class Compositie {
     private int beats;
     private int beatType;
     
-    private Maat[] maten;
+    private List<Maat> maten = new ArrayList<Maat>();
 	
-    public String getTitle() {
+    public List<Maat> getMaten() {
+		return maten;
+	}
+	public void setMaten(List<Maat> maten) {
+		this.maten = maten;
+	}
+	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
@@ -42,12 +55,6 @@ public class Compositie {
 	}
 	public void setBeatType(int beatType) {
 		this.beatType = beatType;
-	}
-	public Maat[] getMaten() {
-		return maten;
-	}
-	public void setMaten(Maat[] maten) {
-		this.maten = maten;
 	}
     
     

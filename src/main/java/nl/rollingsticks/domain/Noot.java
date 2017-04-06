@@ -1,5 +1,12 @@
 package nl.rollingsticks.domain;
 
+/**
+ * Noten
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
+
 public class Noot {
 	
 	private String length;
