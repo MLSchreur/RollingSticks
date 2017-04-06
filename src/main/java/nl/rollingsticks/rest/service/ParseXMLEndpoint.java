@@ -75,7 +75,7 @@ public class ParseXMLEndpoint {
 					// Mode
 					if (qName.equalsIgnoreCase("mode")) {
 						System.out.println("Element              : " + qName);
-						isTitle = true;
+						isMode = true;
 					}
 				}
 
@@ -92,7 +92,7 @@ public class ParseXMLEndpoint {
 
 					// Titel
 					if (isTitle) {
-						System.out.println("Title                : " + new String(ch, start, length));
+						System.out.println("title                : " + new String(ch, start, length));
 						isTitle = false;
 					}
 
@@ -102,13 +102,20 @@ public class ParseXMLEndpoint {
 							String creditWords = new String(ch, start, length);
 							if (creditWords.substring(0, 5).equals("Tempo")) {
 								System.out.println("Element              : " + "credit-words");
-								System.out.println("Credit-words         : " + creditWords);
+								System.out.println("credit-words         : " + creditWords);
 								int tempo = Integer.parseInt(creditWords.substring(6));
 								System.out.println("Tempo                : " + tempo);
 							}
 						}
 						isCredit = false;
 					}
+
+					// Mode
+					if (isMode) {
+						System.out.println("mode                 : " + new String(ch, start, length));
+						isMode = false;
+					}
+
 				}
 			};
 
