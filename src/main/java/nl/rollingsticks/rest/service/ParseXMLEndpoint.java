@@ -55,37 +55,57 @@ public class ParseXMLEndpoint {
 				boolean isCredit =		false;
 				boolean isMode =		false;
 				boolean isBeats =		false;
-				boolean isBeatsType = 	false;
+				boolean isBeatType = 	false;
+				
+				boolean isMeasure = 	false;
+				
+				boolean isNote = 	false;
+				boolean isLength = 	false;
+				boolean isStem = 	false;
+				boolean isBeam = 	false;
+				boolean isChord = 	false;
+				boolean isInstrument = 	false;
+				//boolean isHeigth = 	false;
 
 				public void startElement(String uri, String localName, String qName,
 						Attributes attributes) throws SAXException {
 
-					// Titel
-					if (qName.equalsIgnoreCase("movement-title")) {
-						System.out.println("Element              : " + qName);
-						isTitle = true;
+					switch(qName.toLowerCase()) {
+					case "movement-title":	isTitle = true; break;
+					case "credit-words":	isCredit = true; break;
+					case "mode":			isMode = true; break;
+					case "beats":			isBeats = true; break;
+					case "beat-type":		isBeatType = true; break;
+
+					case "measure":			isMeasure = true; break;
+
+					case "note":			isNote = true; break;
+					case "type":			isLength = true; break;
+					case "stem":			isStem = true; break;
+					case "beam":			isBeam = true; break;
+					case "chord":			isChord = true; break;
+					case "instrument":		isInstrument = true; break;
+					//case "instrument geen nodig":			isHeigth = true; break;
 					}
 					
-					// Credit words (voor Tempo)
-					if (qName.equalsIgnoreCase("credit-words")) {
-//						System.out.println("Start Element 	: " + qName);
-						isCredit = true;
-					}
-
-					// Mode
-					if (qName.equalsIgnoreCase("mode")) {
-						System.out.println("Element              : " + qName);
-						isMode = true;
+					if (isInstrument) {
+						System.out.println("instrument           : " + attributes.getValue("id"));
+						isInstrument = false;
 					}
 				}
 
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					// Credit-words
-//					if (qName.equalsIgnoreCase("credit-words")) {
-//						System.out.println("End Element         : " + qName);
-//					}
+					// Maat
+					if (qName.equalsIgnoreCase("measure")) {
+						System.out.println("measure              : " + "einde van nieuwe maat");
+					}
+
+					// Noot
+					if (qName.equalsIgnoreCase("note")) {
+						System.out.println("note                 : " + "einde van nieuwe noot");
+					}
 				}
 
 				public void characters(char ch[], int start, int length) throws SAXException {
@@ -114,6 +134,56 @@ public class ParseXMLEndpoint {
 					if (isMode) {
 						System.out.println("mode                 : " + new String(ch, start, length));
 						isMode = false;
+					}
+
+					// Beats
+					if (isBeats) {
+						int beats = Integer.parseInt(new String(ch, start, length));
+						System.out.println("beats                : " + beats);
+						isBeats = false;
+					}
+
+					// BeatType
+					if (isBeatType) {
+						int beatType = Integer.parseInt(new String(ch, start, length));
+						System.out.println("beatsType            : " + beatType);
+						isBeatType = false;
+					}
+
+					// Measure
+					if (isMeasure) {
+						System.out.println("measure              : " + "begin van nieuwe maat");
+						isMeasure = false;
+					}
+
+					// Note
+					if (isNote) {
+						System.out.println("note                 : " + "begin van nieuwe noot");
+						isNote = false;
+					}
+
+					// Length
+					if (isLength) {
+						System.out.println("length/type          : " + new String(ch, start, length));
+						isLength = false;
+					}
+
+					// Stem
+					if (isStem) {
+						System.out.println("stem                 : " + new String(ch, start, length));
+						isStem = false;
+					}
+
+					// Beam
+					if (isBeam) {
+						System.out.println("beam                 : " + new String(ch, start, length));
+						isBeam = false;
+					}
+
+					// Chord
+					if (isChord) {
+						System.out.println("chord                : " + "chord is true");
+						isChord = false;
 					}
 
 				}
