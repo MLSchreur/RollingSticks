@@ -9,6 +9,7 @@ import nl.rollingsticks.rest.service.BladmuziekEndpoint;
 import nl.rollingsticks.rest.service.LeerlingEndpoint;
 import nl.rollingsticks.rest.service.LoginEndpoint;
 import nl.rollingsticks.rest.service.MuziekstukEndpoint;
+import nl.rollingsticks.rest.service.ParseXMLEndpoint;
 import nl.rollingsticks.rest.service.GroepEndpoint;
 import nl.rollingsticks.rest.service.HuiswerkopdrachtEndpoint;
 import nl.rollingsticks.rest.service.DocentEndpoint;
@@ -26,5 +27,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(LeerlingEndpoint.class);
 		register(DocentEndpoint.class);
 		register(LoginEndpoint.class);
+		register(ParseXMLEndpoint.class);
 	}
 }
