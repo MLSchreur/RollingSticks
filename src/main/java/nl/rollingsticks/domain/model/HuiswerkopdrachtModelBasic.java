@@ -31,7 +31,7 @@ public class HuiswerkopdrachtModelBasic {
 	}
 
 	public String getNotitie() {
-		return this.huiswerkopdracht.getNotitie() + " Jase was here!";
+		return this.huiswerkopdracht.getNotitie() + "Found you Cor!!!";
 	}
 	
 	/**
