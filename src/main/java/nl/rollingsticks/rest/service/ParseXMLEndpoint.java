@@ -3,9 +3,11 @@ package nl.rollingsticks.rest.service;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.io.StringReader;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -44,71 +46,41 @@ public class ParseXMLEndpoint {
 		System.out.println("XML is binnen");
 
 		try {
-			System.out.println("Plek 1");
-
 			SAXParserFactory factory = SAXParserFactory.newInstance();
-			System.out.println("Plek 2");
 			SAXParser saxParser = factory.newSAXParser();
-			System.out.println("Plek 3");
 
 			DefaultHandler handler = new DefaultHandler() {
 
-				boolean bfname = false;
-				boolean blname = false;
-				boolean bnname = false;
-				boolean bsalary = false;
-				
-				boolean bTitle =	false;
-				boolean bCredit =	false;
+				boolean isTitle =		false;
+				boolean isCredit =		false;
+				boolean isMode =		false;
+				boolean isBeats =		false;
+				boolean isBeatsType = 	false;
 
-				public void startElement(String uri, String localName,String qName,
+				public void startElement(String uri, String localName, String qName,
 						Attributes attributes) throws SAXException {
-
-					
-					// sysout voor begin tag
-					//System.out.println("Start Element :" + qName);
 
 					// Titel
 					if (qName.equalsIgnoreCase("movement-title")) {
-						System.out.println("Start Element 	    : " + qName);
-						bTitle = true;
+						System.out.println("Element              : " + qName);
+						isTitle = true;
 					}
 					
 					// Credit words (voor Tempo)
 					if (qName.equalsIgnoreCase("credit-words")) {
 //						System.out.println("Start Element 	: " + qName);
-						bCredit = true;
-					}
-					
-					
-					if (qName.equalsIgnoreCase("FIRSTNAME")) {
-						bfname = true;
+						isCredit = true;
 					}
 
-					if (qName.equalsIgnoreCase("LASTNAME")) {
-						blname = true;
+					// Mode
+					if (qName.equalsIgnoreCase("mode")) {
+						System.out.println("Element              : " + qName);
+						isTitle = true;
 					}
-
-					if (qName.equalsIgnoreCase("NICKNAME")) {
-						bnname = true;
-					}
-
-					if (qName.equalsIgnoreCase("SALARY")) {
-						bsalary = true;
-					}
-
 				}
 
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
-
-					// sysout voor endtag
-					//System.out.println("End Element :" + qName);
-
-					// Titel
-					if (qName.equalsIgnoreCase("movement-title")) {
-						System.out.println("End Element         : " + qName);
-					}
 
 					// Credit-words
 //					if (qName.equalsIgnoreCase("credit-words")) {
@@ -119,32 +91,33 @@ public class ParseXMLEndpoint {
 				public void characters(char ch[], int start, int length) throws SAXException {
 
 					// Titel
-					if (bTitle) {
-						System.out.println("Title               : " + new String(ch, start, length));
-						bTitle = false;
+					if (isTitle) {
+						System.out.println("Title                : " + new String(ch, start, length));
+						isTitle = false;
 					}
 
 					// Credit-words
-					if (bCredit) {
+					if (isCredit) {
 						if (length > 5) {
-							if (new String(ch, start, length).substring(0, 5).equals("Tempo")) {
-								System.out.println("Start Element 	    : " + "credit-words");
-								System.out.println("Credit-words        : " + new String(ch, start, length));
-								System.out.println("End Element 	    : " + "credit-words");
+							String creditWords = new String(ch, start, length);
+							if (creditWords.substring(0, 5).equals("Tempo")) {
+								System.out.println("Element              : " + "credit-words");
+								System.out.println("Credit-words         : " + creditWords);
+								int tempo = Integer.parseInt(creditWords.substring(6));
+								System.out.println("Tempo                : " + tempo);
 							}
 						}
-						bCredit = false;
-					}
-
-					if (bfname) {
-						System.out.println("First Name : " + new String(ch, start, length));
-						bfname = false;
+						isCredit = false;
 					}
 				}
 			};
 
+			// Documentatie van gekopieerd voorbeeld SAX Parser:
+			// https://www.mkyong.com/java/how-to-read-xml-file-in-java-sax-parser/
 			System.out.println("voor saxparser");
-			saxParser.parse("c:\\Java\\Blof.xml", handler);
+			String xmlToParse = verwijderenDoctype(xml);
+			saxParser.parse(new InputSource(new StringReader(xmlToParse)), handler);
+//			saxParser.parse("c:\\Java\\Blof.xml", handler);
 			// aanpassing 1 -> later uit database
 
 //			saxParser.parse(xml, handler);
@@ -156,5 +129,17 @@ public class ParseXMLEndpoint {
 		
 		return Response.ok().build();
 
+	}
+
+	// SAX parser gaat over zijn nek door onderstaande regel:
+	//<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+	
+	// Foutmelding die je krijgt is:
+	// Server returned HTTP response code: 403 for URL: http://www.musicxml.org/dtds/partwise.dtd
+	
+	// Voorkomen door 
+	private String verwijderenDoctype (String xml) {
+		String xmlStart = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+		return xmlStart + xml.substring(178);
 	}
 }
