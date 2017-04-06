@@ -65,7 +65,6 @@ public class LoginEndpoint {
 					} else if(gebruiker.getClass().getSimpleName().equals("Leerling")){
 						return Response.ok(2).build();
 					}
-					
 				}else{
 					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is niet ok!");
 					return Response.noContent().build();
