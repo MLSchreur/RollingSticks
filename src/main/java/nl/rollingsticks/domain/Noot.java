@@ -9,18 +9,26 @@ package nl.rollingsticks.domain;
 
 public class Noot {
 	
-	private String length;
+    private boolean chord;
+	private int length;
     private String stem;
     private String beam;
     private String heigth;
-    private boolean chord;
     private String instrument;
 	
-	public String getLength() {
+	public boolean isChord() {
+		return chord;
+	}
+	
+	public void setChord(boolean chord) {
+		this.chord = chord;
+	}
+	
+	public int getLength() {
 		return length;
 	}
 	
-	public void setLength(String length) {
+	public void setLength(int length) {
 		this.length = length;
 	}
 	
@@ -46,14 +54,6 @@ public class Noot {
 	
 	public void setHeigth(String heigth) {
 		this.heigth = heigth;
-	}
-	
-	public boolean isChord() {
-		return chord;
-	}
-	
-	public void setChord(boolean chord) {
-		this.chord = chord;
 	}
 	
 	public String getInstrument() {

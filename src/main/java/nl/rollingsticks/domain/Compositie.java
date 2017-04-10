@@ -20,14 +20,6 @@ public class Compositie {
     
     private List<Maat> maten = new ArrayList<Maat>();
 	
-    public List<Maat> getMaten() {
-		return maten;
-	}
-    
-	public void setMaten(List<Maat> maten) {
-		this.maten = maten;
-	}
-	
 	public String getTitle() {
 		return title;
 	}
@@ -66,5 +58,17 @@ public class Compositie {
 	
 	public void setBeatType(int beatType) {
 		this.beatType = beatType;
+	}
+
+	public List<Maat> getMaten() {
+		return maten;
+	}
+    
+	public void setMaten(List<Maat> maten) {
+		this.maten = maten;
+	}
+	
+	public void addMatenToCompositie (Maat maat) {
+		this.maten.add(maat);
 	}
 }
