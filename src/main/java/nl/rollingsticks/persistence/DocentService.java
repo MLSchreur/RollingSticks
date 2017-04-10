@@ -9,22 +9,23 @@ import nl.rollingsticks.domain.Docent;
 @Service
 @Transactional
 public class DocentService {
+	
 	@Autowired
 	private DocentRepository docentRepository;
 
 	public Docent save(Docent docent){
 		return docentRepository.save(docent);
 	}
+	
+	public Docent findById(Long id) {
+		return docentRepository.findOne(id);
+	}
+
 	public Iterable <Docent> findAll(){
 		Iterable <Docent> result = docentRepository.findAll();
 		return result;
 	}
 	
-	////////
-	public Docent findById(Long id) {
-		return docentRepository.findOne(id);
-	}
-
 	public void deleteById(Long id) {
 		docentRepository.delete(id);
 	}
