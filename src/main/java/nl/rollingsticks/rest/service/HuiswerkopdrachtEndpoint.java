@@ -107,7 +107,7 @@ public class HuiswerkopdrachtEndpoint {
 	 */	
 	@DELETE
 	@Path("{id}")
-	public Response deleteMuziekstukById(@PathParam("id") Long id){
+	public Response deleteHuiswerkopdrachtById(@PathParam("id") Long id){
 		System.out.println("Huiswerk - pre@DELETE: id provided: " + id);
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
 		if (huiswerkopdracht == null) {
