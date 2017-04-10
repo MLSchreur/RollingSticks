@@ -41,7 +41,7 @@ public class LoginEndpoint {
 	 * @param	gebruikerValidatie	gebruikersnaam en wachtwoord worden uit een JSON-object van type Gebruiker gehaald
 	 * @return 	Code 200 (OK) - 1 = Docent<br>
 	 * 			Code 200 (OK) - 2 = Leerling<br>
-	 * 		 	Code 204 (No Content)<br>
+	 * 		 	Code 406 (Not Acceptable) - Ongeldige gebruikersnaam of gebruikersnaam/wachtwoord combinatie opgegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -57,21 +57,21 @@ public class LoginEndpoint {
 			gebruikers.add(docent);
 		}
 		for (Gebruiker gebruiker : gebruikers) {
-			if(gebruiker.getGebruikersnaam().equals(gebruikerValidatie.getGebruikersnaam())){
-				if(gebruiker.checkWachtwoord(gebruikerValidatie)){
-					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() +" is ok!");
-					if(gebruiker.getClass().getSimpleName().equals("Docent")){
+			if (gebruiker.getGebruikersnaam().equals(gebruikerValidatie.getGebruikersnaam())) {
+				if (gebruiker.checkWachtwoord(gebruikerValidatie)) {
+					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is ok!");
+					if (gebruiker.getClass().getSimpleName().equals("Docent")){
 						return Response.ok(1).build();
-					} else if(gebruiker.getClass().getSimpleName().equals("Leerling")){
+					} else if (gebruiker.getClass().getSimpleName().equals("Leerling")){
 						return Response.ok(2).build();
 					}
-				}else{
+				} else {
 					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is niet ok!");
-					return Response.noContent().build();
+					return Response.status(406).build();
 				}
 			}
 		}
 		System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is niet gevonden.");
-		return Response.noContent().build();
+		return Response.status(406).build();
 	}
 }

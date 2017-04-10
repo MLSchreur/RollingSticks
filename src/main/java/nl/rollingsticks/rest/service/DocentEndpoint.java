@@ -33,7 +33,7 @@ public class DocentEndpoint {
 	
 	/**
 	 * Aanmaken van nieuwe docent
-	 * @param	leerling Cre&euml;ren van nieuwe Leerling.
+	 * @param	docent Cre&euml;ren van een nieuwe Docent.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 			Id van opgeslagen docent wordt als text_plain teruggegeven.
 	 */	
@@ -104,15 +104,14 @@ public class DocentEndpoint {
 	}
 	
 	//Moet nog worden aangepast
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Docent docent) {
-		this.docentService.save(docent);
-		Docent result = docentService.save(docent);
-		return Response.accepted(result).build();
-	}
-	
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response putLeerling(Docent docent) {
+//		this.docentService.save(docent);
+//		Docent result = docentService.save(docent);
+//		return Response.accepted(result).build();
+//	}
 	
 }
 

@@ -9,4 +9,3 @@ import nl.rollingsticks.domain.Muziekstuk;
 public interface MuziekstukRepository extends CrudRepository <Muziekstuk, Long>{
 
 }
-

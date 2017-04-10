@@ -2,7 +2,6 @@ package nl.rollingsticks.domain.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import nl.rollingsticks.domain.Huiswerkopdracht;
@@ -46,5 +45,4 @@ public class HuiswerkopdrachtModelBasic {
 		}
 		return muziekIds;
 	}
-
 }

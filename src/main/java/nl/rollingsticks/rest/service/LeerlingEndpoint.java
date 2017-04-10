@@ -37,7 +37,7 @@ public class LeerlingEndpoint {
 	
 	/**
 	 * Aanmaken van nieuwe leerling
-	 * @param	leerling Cre&euml;ren van nieuwe Leerling.
+	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
 	 */	
@@ -115,13 +115,13 @@ public class LeerlingEndpoint {
 
 	
 	//Moet nog worden aangepast
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Leerling leerling) {
-		this.leerlingService.save(leerling);
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
-	}
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response putLeerling(Leerling leerling) {
+//		this.leerlingService.save(leerling);
+//		Leerling result = leerlingService.save(leerling);
+//		return Response.accepted(result).build();
+//	}
 	
 }
