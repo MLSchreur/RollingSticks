@@ -21,6 +21,13 @@ import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.persistence.LeerlingService;
 
+/**
+ * Leerling http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
+
 @Path("leerling")
 @Component
 public class LeerlingEndpoint {

@@ -22,6 +22,13 @@ import nl.rollingsticks.domain.model.HuiswerkopdrachtModelBasic;
 import nl.rollingsticks.persistence.HuiswerkopdrachtService;
 import nl.rollingsticks.persistence.MuziekstukService;
 
+/**
+ * Huiswerkopdracht http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
+
 @Path("huiswerkopdracht")
 @Component
 public class HuiswerkopdrachtEndpoint {

@@ -20,6 +20,13 @@ import nl.rollingsticks.domain.Muziekstuk;
 import nl.rollingsticks.domain.model.MuziekstukModelBasic;
 import nl.rollingsticks.persistence.MuziekstukService;
 
+/**
+ * Muziekstuk http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */ 
+
 @Path("muziekstuk")
 @Component
 public class MuziekstukEndpoint {

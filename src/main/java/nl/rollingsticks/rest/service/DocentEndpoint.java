@@ -19,7 +19,12 @@ import org.springframework.stereotype.Component;
 import nl.rollingsticks.domain.Docent;
 import nl.rollingsticks.persistence.DocentService;
 
-
+/**
+ * Docent http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
 @Path("docent")
 @Component
 public class DocentEndpoint {
