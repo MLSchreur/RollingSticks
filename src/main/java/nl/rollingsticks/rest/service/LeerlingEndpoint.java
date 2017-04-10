@@ -17,8 +17,11 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import nl.rollingsticks.domain.Docent;
+import nl.rollingsticks.domain.Gebruiker;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.LeerlingModelBasic;
+import nl.rollingsticks.persistence.DocentService;
 import nl.rollingsticks.persistence.LeerlingService;
 
 @Path("leerling")
@@ -28,16 +31,37 @@ public class LeerlingEndpoint {
 	@Autowired
 	private LeerlingService leerlingService;
 	
+	@Autowired
+	private DocentService docentService;
+	
 	/**
 	 * Aanmaken van nieuwe leerling
 	 * @param	leerling Cre&euml;ren van nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
+	 * 			Code 406 (Not acceptable) - gebruikersnaam bestaat al<br>
 	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response postLeerling(Leerling leerling){	
+	public Response postLeerling(Leerling leerling){
+		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
+		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
+		List <Gebruiker> gebruikers = new ArrayList<>();
+		for (Leerling ll : leerlingen) {
+			gebruikers.add(ll);
+		}
+		for (Docent docent : docenten) {
+			gebruikers.add(docent);
+		}
+		if(gebruikers.size() != 0){
+			for(Gebruiker gebruiker: gebruikers){
+				if(gebruiker.getGebruikersnaam().equalsIgnoreCase(leerling.getGebruikersnaam())){
+					System.out.println(leerling.getGebruikersnaam() + " bestaat al!");
+					return Response.status(406).build();
+				}
+			}
+		}
 		System.out.println("Leerling - pre@POST: " + leerling.getId() + " - " + leerling.getVoornaam() + " " + leerling.getAchternaam());
 		Leerling result = leerlingService.save(leerling);		
 		System.out.println("Leerling - @POST: " + result.getId() + " - " + result.getVoornaam() + " " + result.getAchternaam());
