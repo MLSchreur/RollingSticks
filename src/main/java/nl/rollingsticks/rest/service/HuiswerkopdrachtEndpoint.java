@@ -60,7 +60,7 @@ public class HuiswerkopdrachtEndpoint {
 	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
 	 * @param 	id 	Id van de Huiswerkopdracht wordt uit het path gehaald.
 	 * @return 	Code 200 (OK)<br>
-	 * 		 	Code 204 (No Content)<br>
+	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
 	 * 			Opgevraagde Huiswerkopdracht wordt als JSON object teruggegeven.<br>
 	 * 			Muziekstukken kunnen via api's van muziekstuk verder opgevraagd worden.<br>
 	 * 			Voorbeeld: { "id": 1, "muziekstukken": [ 1, 2, 3 ], "lesDatum": 1491813000000, "notitie": "Huiswerk met 3 muziekstukken." }
@@ -71,13 +71,13 @@ public class HuiswerkopdrachtEndpoint {
 	public Response getHuiswerkopdrachtById(@PathParam("id") Long id ) {
 		System.out.println("Huiswerk - pre@GET: (" + id + ")");
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
-		if (huiswerkopdracht == null) {
-			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
-		} else {
+		if (huiswerkopdracht != null) {
 			HuiswerkopdrachtModelBasic result = new HuiswerkopdrachtModelBasic(huiswerkopdracht);
 			System.out.println("Huiswerk - @GET: (" + id + ") " + huiswerkopdracht.getNotitie());
 			return Response.ok(result).build();
+		} else {
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.status(406).entity("1").build();
 		}
 	}
 	
@@ -103,19 +103,19 @@ public class HuiswerkopdrachtEndpoint {
 	 * Verwijderen van de opgegeven Huiswerkopdracht (id).
 	 * @param 	id 	Id van de te verwijderen Huiswerkopdracht wordt uit het path gehaald.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 		 	Code 204 (No Content)
+	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.
 	 */	
 	@DELETE
 	@Path("{id}")
 	public Response deleteHuiswerkopdrachtById(@PathParam("id") Long id){
 		System.out.println("Huiswerk - pre@DELETE: id provided: " + id);
 		Huiswerkopdracht huiswerkopdracht = this.huiswerkopdrachtService.findById(id);
-		if (huiswerkopdracht == null) {
-			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
-		} else {
+		if (huiswerkopdracht != null) {
 			this.huiswerkopdrachtService.deleteById(id);
 			return Response.accepted().build();
+		} else {
+			System.out.println("Huiswerk - Id " + id + " bestaat niet.");
+			return Response.status(406).entity("1").build();
 		}
 	}
 

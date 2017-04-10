@@ -7,6 +7,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import nl.rollingsticks.domain.Compositie;
+import nl.rollingsticks.domain.Maat;
+import nl.rollingsticks.domain.Noot;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +19,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -47,16 +52,27 @@ public class ParseXMLEndpoint {
 	 */	
 	@POST
 	@Consumes(MediaType.TEXT_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response parseXML(@PathParam("id") Long id, String xml) {
 		System.out.println("XML is binnen");
 
+		Compositie compositie = new Compositie();
+		
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
 			DefaultHandler handler = new DefaultHandler() {
 
+				// Dit kan niet buiten de DefaultHandler, aangezien er steeds een nieuwe
+				// maat aangemaakt moet worden en dat mag niet wanneer deze een niveau hoger
+				// gedefinieerd is.
+				// De compositie moet wel een niveau hoger, omdat het resultaat daarvan
+				// teruggegeven moet worden.
+				Maat maat;
+				Noot noot;
+				
 				// algemene informatie
 				boolean isTitle =				false;
 				boolean isCredit =				false;
@@ -115,6 +131,7 @@ public class ParseXMLEndpoint {
 					if (isInstrument) {
 						String instrumentId = attributes.getValue("id");
 						System.out.println("instrument ID        : " + instrumentId + " - " + omzettenInstrumentId(instrumentId));
+						noot.setInstrument(omzettenInstrumentId(instrumentId));
 						isInstrument = false;
 					}
 
@@ -123,14 +140,16 @@ public class ParseXMLEndpoint {
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					// Maat
+					// Measure - Maat
 					if (qName.equalsIgnoreCase("measure")) {
 						System.out.println("measure              : " + "einde van nieuwe maat");
+						compositie.addMatenToCompositie(maat);
 					}
 
-					// Noot
+					// Note - Noot
 					if (qName.equalsIgnoreCase("note")) {
 						System.out.println("note                 : " + "einde van nieuwe noot");
+						maat.addNotenToMaat(noot);
 					}
 				}
 
@@ -139,6 +158,7 @@ public class ParseXMLEndpoint {
 					// Titel
 					if (isTitle) {
 						System.out.println("title                : " + new String(ch, start, length));
+						compositie.setTitle(new String(ch, start, length));
 						isTitle = false;
 					}
 
@@ -150,6 +170,7 @@ public class ParseXMLEndpoint {
 								System.out.println("credit-words         : " + creditWords);
 								int tempo = Integer.parseInt(creditWords.substring(6));
 								System.out.println("Tempo                : " + tempo);
+								compositie.setTempo(tempo);
 							}
 						}
 						isCredit = false;
@@ -167,6 +188,7 @@ public class ParseXMLEndpoint {
 					// Mode
 					if (isMode) {
 						System.out.println("mode                 : " + new String(ch, start, length));
+						compositie.setMode(new String(ch, start, length));
 						isMode = false;
 					}
 
@@ -174,6 +196,7 @@ public class ParseXMLEndpoint {
 					if (isBeats) {
 						int beats = Integer.parseInt(new String(ch, start, length));
 						System.out.println("beats                : " + beats);
+						compositie.setBeats(beats);
 						isBeats = false;
 					}
 
@@ -181,18 +204,21 @@ public class ParseXMLEndpoint {
 					if (isBeatType) {
 						int beatType = Integer.parseInt(new String(ch, start, length));
 						System.out.println("beatsType            : " + beatType);
+						compositie.setBeatType(beatType);
 						isBeatType = false;
 					}
 
-					// Measure
+					// Measure - Maat
 					if (isMeasure) {
 						System.out.println("measure              : " + "begin van nieuwe maat");
+						maat = new Maat();
 						isMeasure = false;
 					}
 
-					// Note
+					// Note - Noot
 					if (isNote) {
 						System.out.println("note                 : " + "begin van nieuwe noot");
+						noot = new Noot();
 						isNote = false;
 					}
 
@@ -201,24 +227,28 @@ public class ParseXMLEndpoint {
 					if (isLength) {
 						String lengthNote = new String(ch, start, length);
 						System.out.println("length/type          : " + lengthNote + " - " + omzettenLengteNoot(lengthNote));
+						noot.setLength(omzettenLengteNoot(lengthNote));
 						isLength = false;
 					}
 
 					// Stem
 					if (isStem) {
 						System.out.println("stem                 : " + new String(ch, start, length));
+						noot.setStem(new String(ch, start, length));
 						isStem = false;
 					}
 
 					// Beam
 					if (isBeam) {
 						System.out.println("beam                 : " + new String(ch, start, length));
+						noot.setBeam(new String(ch, start, length));
 						isBeam = false;
 					}
 
 					// Chord
 					if (isChord) {
 						System.out.println("chord                : " + "chord is true");
+						noot.setChord(true);
 						isChord = false;
 					}
 
@@ -241,7 +271,7 @@ public class ParseXMLEndpoint {
 			e.printStackTrace();
 		}
 		
-		return Response.ok().build();
+		return Response.ok(compositie).build();
 
 	}
 
