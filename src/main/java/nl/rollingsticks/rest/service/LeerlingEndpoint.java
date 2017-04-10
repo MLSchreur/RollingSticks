@@ -37,7 +37,7 @@ public class LeerlingEndpoint {
 	
 	/**
 	 * Aanmaken van nieuwe leerling
-	 * @param	leerling Cre&euml;ren van nieuwe Leerling.
+	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
 	 */	

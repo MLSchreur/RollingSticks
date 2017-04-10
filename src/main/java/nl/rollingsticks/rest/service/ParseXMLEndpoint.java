@@ -41,6 +41,8 @@ public class ParseXMLEndpoint {
 
 	/**
 	 * Parsen van XML bestand
+	 * @param	id	Id van muziekstuk waarvan XML afgespeeld moet gaan worden
+	 * @param	xml Tijdelijk kun je handmatig een xml meegeven die omgezet zal gaan worden.
 	 * @return 	Is allemaal nog een verrassing<br>
 	 */	
 	@POST
