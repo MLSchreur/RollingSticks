@@ -199,7 +199,7 @@ public class ParseXMLEndpoint {
 					// Length
 					if (isLength) {
 						String lengthNote = new String(ch, start, length);
-						System.out.println("length/type          : " + lengthNote);
+						System.out.println("length/type          : " + lengthNote + " - " + omzettenLengteNoot(lengthNote));
 						isLength = false;
 					}
 
@@ -264,6 +264,7 @@ public class ParseXMLEndpoint {
 		case "eighth": 		return 8;
 		case "16th": 		return 16;
 		case "32nd": 		return 32;
+		case "64th": 		return 64;
 		}
 		// Niets gevonden dan is er iets mis en geven we maar 0 terug. 
 		// Dit moet nog wel even netjes in de documentatie van de API vastgelegd wordt,
