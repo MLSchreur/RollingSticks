@@ -1,5 +1,6 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Docent;
+import nl.rollingsticks.domain.Gebruiker;
+import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.persistence.DocentService;
+import nl.rollingsticks.persistence.LeerlingService;
 
 /**
  * Docent http-methodes
@@ -31,16 +35,37 @@ public class DocentEndpoint {
 	@Autowired
 	private DocentService docentService;
 	
+	@Autowired
+	private LeerlingService leerlingService;
+	
 	/**
 	 * Aanmaken van nieuwe docent
 	 * @param	docent Cre&euml;ren van een nieuwe Docent.
 	 * @return 	Code 202 (Accepted)<br>
+	 * 			Code 406 (Not acceptable) - gebruikersnaam bestaat al<br>
 	 * 			Id van opgeslagen docent wordt als text_plain teruggegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postDocent(Docent docent){
+		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
+		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
+		List <Gebruiker> gebruikers = new ArrayList<>();
+		for (Leerling ll : leerlingen) {
+			gebruikers.add(ll);
+		}
+		for (Docent dcnt : docenten) {
+			gebruikers.add(dcnt);
+		}
+		if(gebruikers.size() != 0){
+			for(Gebruiker gebruiker: gebruikers){
+				if(gebruiker.getGebruikersnaam().equalsIgnoreCase(docent.getGebruikersnaam())){
+					System.out.println(docent.getGebruikersnaam() + " bestaat al!");
+					return Response.status(406).build();
+				}
+			}
+		}
 		System.out.println("Docent - pre@POST: " + docent.getId() + " - " + docent.getVoornaam() + " " + docent.getAchternaam());
 		Docent result = docentService.save(docent);		
 		System.out.println("Docent - @POST: " + result.getId() + " - " + result.getVoornaam() + " " + result.getAchternaam());
