@@ -104,15 +104,14 @@ public class DocentEndpoint {
 	}
 	
 	//Moet nog worden aangepast
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Docent docent) {
-		this.docentService.save(docent);
-		Docent result = docentService.save(docent);
-		return Response.accepted(result).build();
-	}
-	
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response putLeerling(Docent docent) {
+//		this.docentService.save(docent);
+//		Docent result = docentService.save(docent);
+//		return Response.accepted(result).build();
+//	}
 	
 }
 

@@ -115,13 +115,13 @@ public class LeerlingEndpoint {
 
 	
 	//Moet nog worden aangepast
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Leerling leerling) {
-		this.leerlingService.save(leerling);
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
-	}
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response putLeerling(Leerling leerling) {
+//		this.leerlingService.save(leerling);
+//		Leerling result = leerlingService.save(leerling);
+//		return Response.accepted(result).build();
+//	}
 	
 }
