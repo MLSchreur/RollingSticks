@@ -155,7 +155,6 @@ public class MuziekstukEndpoint {
 	/**
 	 * Parsen van XML bestand
 	 * @param	id	Id van muziekstuk waarvan XML afgespeeld moet gaan worden
-	 * @param	xml Tijdelijk kun je handmatig een xml meegeven die omgezet zal gaan worden.
 	 * @return 	Code 200 (Ok) + JSON bestand met omgezette XML van het Muziekstuk<br>
 	 * 		 	Code 406 (Not Acceptable) - 1 = Muziekstuk met opgegeven id bestaat niet.<br>
 	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk bevat geen XML bestand.<br>
