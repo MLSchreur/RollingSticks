@@ -12,15 +12,13 @@ import java.util.List;
 
 public class Maat {
 
-	private static int aantalNoten = 0;
-
 	private int nummer;
 	private List<Noot> noten = new ArrayList<Noot>();
 
-	// Geen setter nodig. Dit geeft puur het nummer van de maat aan
+	// Geen setter voor nummer nodig. Dit geeft puur het nummer van de maat aan
 	// voor de eventuele index van maten aan de voorkant.
-	public Maat () {
-		this.nummer = ++aantalNoten;
+	public Maat (int nummerMaat) {
+		this.nummer = nummerMaat;
 		System.out.println("*****Nieuwe maat...");
 	}
 

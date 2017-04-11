@@ -11,7 +11,9 @@ import java.util.List;
  */
 
 public class Compositie {
-	
+
+	private int aantalMaten = 0;
+
 	private String title;
 	private int tempo;
 	private String mode;
@@ -70,5 +72,9 @@ public class Compositie {
 	
 	public void addMatenToCompositie (Maat maat) {
 		this.maten.add(maat);
+	}
+	
+	public int bepaalNummerMaat () {
+		return ++aantalMaten;
 	}
 }
