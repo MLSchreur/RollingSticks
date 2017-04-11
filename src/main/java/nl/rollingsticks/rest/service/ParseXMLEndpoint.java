@@ -95,7 +95,6 @@ public class ParseXMLEndpoint {
 				boolean isBeam = 				false;
 				boolean isChord = 				false;
 				boolean isInstrument = 			false;
-				//boolean isHeigth = 			false;
 
 				public void startElement(String uri, String localName, String qName,
 						Attributes attributes) throws SAXException {
@@ -118,7 +117,6 @@ public class ParseXMLEndpoint {
 					
 					case "score-instrument":	isScoreInstrument = true; break;
 					case "instrument-name":		isInstrumentNaam = true; break;
-					//case "instrument geen nodig voor heigth":			isHeigth = true; break;
 					}
 					
 					if (isScoreInstrument) {
@@ -132,7 +130,7 @@ public class ParseXMLEndpoint {
 						String instrumentId = attributes.getValue("id");
 						System.out.println("instrument ID        : " + instrumentId + " - " + opzoekenInstrument(instrumentId).instrumentNaam);
 						noot.setInstrument(opzoekenInstrument(instrumentId).instrumentNaam);
-						noot.setHeigth(opzoekenInstrument(instrumentId).nootNaam);
+						noot.setNootNaam(opzoekenInstrument(instrumentId).nootNaam);
 						isInstrument = false;
 					}
 

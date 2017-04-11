@@ -10,11 +10,11 @@ package nl.rollingsticks.domain;
 public class Noot {
 	
     private boolean chord;
+    private String instrument;
+    private String nootNaam;
 	private int length;
     private String stem;
     private String beam;
-    private String heigth;
-    private String instrument;
 	
 	public boolean isChord() {
 		return chord;
@@ -48,12 +48,12 @@ public class Noot {
 		this.beam = beam;
 	}
 	
-	public String getHeigth() {
-		return heigth;
+	public String getNootNaam() {
+		return nootNaam;
 	}
 	
-	public void setHeigth(String heigth) {
-		this.heigth = heigth;
+	public void setNootNaam(String nootNaam) {
+		this.nootNaam = nootNaam;
 	}
 	
 	public String getInstrument() {
