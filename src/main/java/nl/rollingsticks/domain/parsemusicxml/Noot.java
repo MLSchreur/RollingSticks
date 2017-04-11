@@ -1,4 +1,4 @@
-package nl.rollingsticks.domain;
+package nl.rollingsticks.domain.parsemusicxml;
 
 /**
  * Noten

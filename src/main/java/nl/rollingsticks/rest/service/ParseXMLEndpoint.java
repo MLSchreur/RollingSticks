@@ -7,9 +7,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import nl.rollingsticks.domain.Compositie;
-import nl.rollingsticks.domain.Maat;
-import nl.rollingsticks.domain.Noot;
+import nl.rollingsticks.domain.parsemusicxml.Compositie;
+import nl.rollingsticks.domain.parsemusicxml.Maat;
+import nl.rollingsticks.domain.parsemusicxml.Noot;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -43,6 +43,23 @@ public class ParseXMLEndpoint {
 	//		private DocentService docentService;
 	
 	List<Instrument> instrumenten = new ArrayList<>();
+
+	@POST
+	@Consumes(MediaType.TEXT_XML)
+	@Produces(MediaType.TEXT_XML)
+	public Response parseXML2(String xml) {
+		System.out.println("XML is binnen");
+		initInstrumenten(instrumenten);
+		String xmlToParse = verwijderenDoctype(xml);
+		xmlToParse = xml;
+		int startVerwijderenAttribuut = xmlToParse.indexOf("PUBLIC");
+		int eindeVerwijderenAttribuut = xmlToParse.indexOf(">", startVerwijderenAttribuut);
+		String teVerwijderenAttribuut = xmlToParse.substring(startVerwijderenAttribuut, eindeVerwijderenAttribuut);
+		System.out.println("Te verwijderen attribuut: " + teVerwijderenAttribuut);
+		xmlToParse = xml.replaceFirst(teVerwijderenAttribuut, "");
+		return Response.ok(xmlToParse).build();
+
+	}
 
 	/**
 	 * Parsen van XML bestand
@@ -281,8 +298,14 @@ public class ParseXMLEndpoint {
 	
 	// Voorkomen door:
 	private String verwijderenDoctype (String xml) {
-		String xmlStart = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-		return xmlStart + xml.substring(178);
+		// Attribuut vanaf de tekst "PUBLIC" tot aan de sluit tag die daarna komt, mag verwijderd
+		// worden. Anders gaat de SAX parser over zijn nek.
+		int startVerwijderenAttribuut = xml.indexOf("PUBLIC");
+		int eindeVerwijderenAttribuut = xml.indexOf(">", startVerwijderenAttribuut);
+		String teVerwijderenAttribuut = xml.substring(startVerwijderenAttribuut, eindeVerwijderenAttribuut);
+		System.out.println("Te verwijderen attribuut: " + teVerwijderenAttribuut);
+		return xml.replaceFirst(teVerwijderenAttribuut, "");
+	
 	}
 	
 	private int omzettenLengteNoot (String lengthNote) {
