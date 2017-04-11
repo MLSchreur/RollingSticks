@@ -4,7 +4,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -145,8 +144,8 @@ public class ParseMusicXML {
 					// De id is al gevonden, nu de bijbehorende naam en dan vastleg in de index
 					// zodat bij de noten het instrument teruggestuurd kan worden.
 					if (isInstrumentIndexNaam) {
-						String instrumentNaam = new String(ch, start, length);
-						vastleggenInstrumentenIndex (instrumentIndexId, instrumentNaam);
+						String instrumentIndexNaam = new String(ch, start, length);
+						vastleggenInstrumentenIndex (instrumentIndexId, instrumentIndexNaam);
 						instrumentIndexId = null;
 						isInstrumentIndexNaam = false;
 					}
@@ -322,14 +321,15 @@ public class ParseMusicXML {
 																			// EZdrummer  ??
 	}
 	
-	private void vastleggenInstrumentenIndex (String instrumentIndex, String instrumentNaam) {
+	private void vastleggenInstrumentenIndex (String instrumentIndexId, String instrumentIndexNaam) {
 		for (Instrument instrument : instrumenten) {
-			if (instrument.instrumentNaam.equalsIgnoreCase(instrumentNaam)) {
-				//System.out.println("** Match ***");
-				instrument.instrumentId = instrumentIndex;
-				break; // niet langer doorgaan dan nodig is.
+			if (instrument.instrumentNaam.equalsIgnoreCase(instrumentIndexNaam)) {
+				// System.out.println("** Match ***" + instrumentIndexId + " - [" + instrumentIndexNaam + "]");
+				instrument.instrumentId = instrumentIndexId;
+				return; // niet langer doorgaan dan nodig is.
 			}
 		}
+		System.out.println("**** Probleem: onbekend muziekinstrument - " + instrumentIndexId + " - [" + instrumentIndexNaam + "]");
 	}
 	
 	private Instrument opzoekenInstrument (String instrumentId) {

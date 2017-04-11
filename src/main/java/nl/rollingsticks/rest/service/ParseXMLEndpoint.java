@@ -36,7 +36,7 @@ public class ParseXMLEndpoint {
 	 * @param	id	Id van muziekstuk waarvan XML afgespeeld moet gaan worden
 	 * @param	xml Tijdelijk kun je handmatig een xml meegeven die omgezet zal gaan worden.
 	 * @return 	Code 200 (Ok) + JSON bestand met omgezette XML van het Muziekstuk<br>
-	 * 		 	Code 406 (Not Acceptable) - 1 = Fout in de XML Parser.<br>
+	 * 		 	Code 406 (Not Acceptable) - 1 = Fout opgetreden in de XML Parser. Waarschijnlijk ongeldige XML.
 	 */	
 	@POST
 	@Consumes(MediaType.TEXT_XML)
@@ -52,6 +52,5 @@ public class ParseXMLEndpoint {
 		} else {
 			return Response.status(406).entity("1").build();
 		}
-//		return Response.ok().build();
 	}
 }

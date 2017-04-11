@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Muziekstuk;
 import nl.rollingsticks.domain.model.MuziekstukModelBasic;
+import nl.rollingsticks.domain.parsemusicxml.Compositie;
+import nl.rollingsticks.domain.parsemusicxml.ParseMusicXML;
 import nl.rollingsticks.persistence.MuziekstukService;
 
 /**
@@ -150,6 +152,40 @@ public class MuziekstukEndpoint {
 		return Response.ok(result).build();
 	}
 	
+	/**
+	 * Parsen van XML bestand
+	 * @param	id	Id van muziekstuk waarvan XML afgespeeld moet gaan worden
+	 * @param	xml Tijdelijk kun je handmatig een xml meegeven die omgezet zal gaan worden.
+	 * @return 	Code 200 (Ok) + JSON bestand met omgezette XML van het Muziekstuk<br>
+	 * 		 	Code 406 (Not Acceptable) - 1 = Muziekstuk met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk bevat geen XML bestand.<br>
+	 * 		 	Code 406 (Not Acceptable) - 3 = Fout opgetreden in de XML Parser. Waarschijnlijk ongeldige XML.
+	 */	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/parsedxml")
+	public Response parseXML(@PathParam("id") Long id) {
+		Muziekstuk result = this.muziekstukService.findById(id);
+		if (result != null) {
+			String xml = result.getXml();
+			if (xml != null) {
+				ParseMusicXML parseMusicXML = new ParseMusicXML();
+				Compositie compositie = parseMusicXML.parseMusicXML(xml);
+				// In geval van een exception in de parser wordt null terug gestuurd.
+				if (compositie != null) {
+					return Response.ok(compositie).build();
+				} else {
+					return Response.status(406).entity("3").build();
+				}
+			} else {
+				return Response.status(406).entity("2").build();
+			}
+		} else {
+			return Response.status(406).entity("1").build();
+		}
+
+	}
+
 	/**
 	 * Opvragen van XML bestand van Muziekstuk (id).
 	 * @param 	id 	Id van het Muziekstuk wordt uit het path gehaald.
