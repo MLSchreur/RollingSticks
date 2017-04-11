@@ -125,7 +125,6 @@ public class HuiswerkopdrachtEndpoint {
 	 * @param	muziekstukId	Id van het te verwijderen Muziekstuk wordt uit het path gehaald.
 	 * @param	muziekstukDel	Middels een boolean wordt bepaald of het muziekstuk vervolgens ook uit de database verwijderd mag worden.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 		 	Code 204 (No Content)
 	 * 		 	Code 406 (Not Acceptable) - 1 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
 	 * 		 	Code 406 (Not Acceptable) - 2 = Muziekstuk met opgegeven id bestaat niet.<br>
 	 * 		 	Code 406 (Not Acceptable) - 3 = Muziekstuk met opgegeven id is niet gekoppeld aan de Huiswerkopdracht.

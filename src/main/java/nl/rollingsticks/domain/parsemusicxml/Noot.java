@@ -1,4 +1,4 @@
-package nl.rollingsticks.domain;
+package nl.rollingsticks.domain.parsemusicxml;
 
 /**
  * Noten
@@ -59,7 +59,13 @@ public class Noot {
 	public String getInstrument() {
 		return instrument;
 	}
+	
 	public void setInstrument(String instrument) {
 		this.instrument = instrument;
+	}
+
+	public void setInstrumentEnNootNaam(Instrument instrument) {
+		this.instrument = instrument.instrumentNaam;
+		this.nootNaam   = instrument.nootNaam;
 	}
 }

@@ -1,4 +1,4 @@
-package nl.rollingsticks.domain;
+package nl.rollingsticks.domain.parsemusicxml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ public class Maat {
 	// voor de eventuele index van maten aan de voorkant.
 	public Maat (int nummerMaat) {
 		this.nummer = nummerMaat;
-		System.out.println("*****Nieuwe maat...");
 	}
 
 	public int getNummer() {
