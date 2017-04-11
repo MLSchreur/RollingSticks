@@ -47,7 +47,7 @@ public class DocentEndpoint {
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postDocent(Docent docent){
 		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
 		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
