@@ -130,27 +130,12 @@ public class ParseXMLEndpoint {
 					// CODE UITBREIDEN
 					if (isInstrument) {
 						String instrumentId = attributes.getValue("id");
-						System.out.println("instrument ID        : " + instrumentId + " - " + omzettenInstrumentId(instrumentId));
-						noot.setInstrument(omzettenInstrumentId(instrumentId));
+						System.out.println("instrument ID        : " + instrumentId + " - " + opzoekenInstrument(instrumentId).instrumentNaam);
+						noot.setInstrument(opzoekenInstrument(instrumentId).instrumentNaam);
+						noot.setHeigth(opzoekenInstrument(instrumentId).nootNaam);
 						isInstrument = false;
 					}
 
-				}
-
-				public void endElement(String uri, String localName,
-						String qName) throws SAXException {
-
-					// Measure - Maat
-					if (qName.equalsIgnoreCase("measure")) {
-						System.out.println("measure              : " + "einde van nieuwe maat");
-						compositie.addMatenToCompositie(maat);
-					}
-
-					// Note - Noot
-					if (qName.equalsIgnoreCase("note")) {
-						System.out.println("note                 : " + "einde van nieuwe noot");
-						maat.addNotenToMaat(noot);
-					}
 				}
 
 				public void characters(char ch[], int start, int length) throws SAXException {
@@ -211,7 +196,7 @@ public class ParseXMLEndpoint {
 					// Measure - Maat
 					if (isMeasure) {
 						System.out.println("measure              : " + "begin van nieuwe maat");
-						maat = new Maat();
+						maat = new Maat(compositie.bepaalNummerMaat());
 						isMeasure = false;
 					}
 
@@ -251,7 +236,22 @@ public class ParseXMLEndpoint {
 						noot.setChord(true);
 						isChord = false;
 					}
+				}
 
+				public void endElement(String uri, String localName,
+						String qName) throws SAXException {
+
+					// Measure - Maat
+					if (qName.equalsIgnoreCase("measure")) {
+						System.out.println("measure              : " + "einde van nieuwe maat");
+						compositie.addMatenToCompositie(maat);
+					}
+
+					// Note - Noot
+					if (qName.equalsIgnoreCase("note")) {
+						System.out.println("note                 : " + "einde van nieuwe noot");
+						maat.addNotenToMaat(noot);
+					}
 				}
 			};
 
@@ -303,18 +303,6 @@ public class ParseXMLEndpoint {
 		return 0;
 	}
 	
-	private String omzettenInstrumentId (String instrumentId) {
-		for (Instrument instrument : instrumenten) {
-//			if (instrument.instrumentId.equalsIgnoreCase(instrumentId)) {
-			if (instrumentId.equalsIgnoreCase(instrument.instrumentId)) {
-				return instrument.instrumentNaam;
-			}
-		}
-		// Niets gevonden dan is er iets mis en geven we maar deze tekst terug. 
-		// Even overleggen met Frontend wat we dan terug willen geven en vastleggen in de Javadocs.
-		return "Instrument onbekend";
-	}
-	
 	// methodes voor Instrumenten tabel (init & vastleggen vanuit XML)
 	private void initInstrumenten(List<Instrument> instrumenten) {
 		instrumenten.add(new Instrument("c6"));
@@ -343,8 +331,35 @@ public class ParseXMLEndpoint {
 			if (instrument.instrumentNaam.equalsIgnoreCase(instrumentNaam)) {
 				//System.out.println("** Match ***");
 				instrument.instrumentId = instrumentIndex;
+				break; // niet langer doorgaan dan nodig is.
 			}
 		}
+	}
+	
+//	private String omzettenInstrumentIdNaarInstrument (String instrumentId) {
+//		for (Instrument instrument : instrumenten) {
+////			if (instrument.instrumentId.equalsIgnoreCase(instrumentId)) {
+//			if (instrumentId.equalsIgnoreCase(instrument.instrumentId)) {
+//				return instrument.instrumentNaam;
+//			}
+//		}
+//		// Niets gevonden dan is er iets mis en geven we maar deze tekst terug. 
+//		// Even overleggen met Frontend wat we dan terug willen geven en vastleggen in de Javadocs.
+//		return "InstrumentID " + instrumentId + " is onbekend";
+//	}
+	
+	private Instrument opzoekenInstrument (String instrumentId) {
+		for (Instrument instrument : instrumenten) {
+			if (instrumentId.equalsIgnoreCase(instrument.instrumentId)) {
+				//System.out.println("** Match ***");
+				return instrument;
+			}
+		}
+		// Niets gevonden dan is er iets mis en geven we maar deze tekst terug. 
+		// Even overleggen met Frontend wat we dan terug willen geven en vastleggen in de Javadocs.
+		String onbekend = instrumentId + " is onbekend";
+		Instrument onbekendInstrument = new Instrument(onbekend, onbekend);
+		return onbekendInstrument;
 	}
 }
 
