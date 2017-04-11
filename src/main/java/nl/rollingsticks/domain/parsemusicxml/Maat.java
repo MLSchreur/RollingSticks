@@ -19,7 +19,6 @@ public class Maat {
 	// voor de eventuele index van maten aan de voorkant.
 	public Maat (int nummerMaat) {
 		this.nummer = nummerMaat;
-		System.out.println("*****Nieuwe maat...");
 	}
 
 	public int getNummer() {
