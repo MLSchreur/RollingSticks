@@ -98,14 +98,6 @@ public class ParseMusicXML {
 						String instrumentId = attributes.getValue("id");
 						Instrument instrument = opzoekenInstrument(instrumentId);
 						noot.setInstrumentEnNootNaam(instrument);
-						// kan ook een aparte methode maken bij noot, waarbij ik een instrument meegeef.
-						// 3 verschillende opties, die allemaal hetzelfde doen, wat heeft de voorkeur??
-						// of zo:
-//						noot.setInstrument(instrument.instrumentNaam);
-//						noot.setNootNaam(instrument.nootNaam);
-						// 2x opzoeken is niet handig.
-//						noot.setInstrument(opzoekenInstrument(instrumentId).instrumentNaam);
-//						noot.setNootNaam(opzoekenInstrument(instrumentId).nootNaam);
 						isInstrument = false;
 					}
 
