@@ -1,5 +1,8 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,73 +17,135 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import nl.rollingsticks.domain.Docent;
+import nl.rollingsticks.domain.Gebruiker;
 import nl.rollingsticks.domain.Leerling;
+import nl.rollingsticks.domain.model.LeerlingModelBasic;
+import nl.rollingsticks.persistence.DocentService;
 import nl.rollingsticks.persistence.LeerlingService;
+
+/**
+ * Leerling http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
 
 @Path("leerling")
 @Component
 public class LeerlingEndpoint {
+	
 	@Autowired
 	private LeerlingService leerlingService;
 	
+	@Autowired
+	private DocentService docentService;
+	
+	/**
+	 * Aanmaken van nieuwe leerling
+	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 			Code 406 (Not acceptable) - gebruikersnaam bestaat al<br>
+	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postLeerling(Leerling leerling){
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
+		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
+		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
+		List <Gebruiker> gebruikers = new ArrayList<>();
+		for (Leerling ll : leerlingen) {
+			gebruikers.add(ll);
+		}
+		for (Docent docent : docenten) {
+			gebruikers.add(docent);
+		}
+		if(gebruikers.size() != 0){
+			for(Gebruiker gebruiker: gebruikers){
+				if(gebruiker.getGebruikersnaam().equalsIgnoreCase(leerling.getGebruikersnaam())){
+					System.out.println(leerling.getGebruikersnaam() + " bestaat al!");
+					return Response.status(406).build();
+				}
+			}
+		}
+		System.out.println("Leerling - pre@POST: " + leerling.getId() + " - " + leerling.getVoornaam() + " " + leerling.getAchternaam());
+		Leerling result = leerlingService.save(leerling);		
+		System.out.println("Leerling - @POST: " + result.getId() + " - " + result.getVoornaam() + " " + result.getAchternaam());
+		return Response.accepted(result.getId()).build();
 	}
 	
+	/**
+	 * Opvragen van de leerling.
+	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
+	 * @param 	id 	Id van het Docent wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 204 (No Content)<br>
+	 * 			Opgevraagde leerling wordt (zonder wachtwoord) als JSON object teruggegeven.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response getLeerlingById(@PathParam("id") Long id ) {
-		Leerling result = this.leerlingService.findById(id);
-		return Response.ok(result).build();
+		System.out.println("Leerling - pre@GET: (" + id + ")");
+		Leerling leerling = this.leerlingService.findById(id);
+		if (leerling == null){
+			System.out.println("Leerling - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
+		} else {
+			LeerlingModelBasic result = new LeerlingModelBasic(leerling);
+			return Response.ok(result).build();
+		}
 	}
 	
+	/**
+	 * Opvragen van alle leerlingen.
+	 * @return 	Code 200 (OK)<br>
+	 * 			Alle leerlingen (zonder wactwoord) worden als JSON objecten teruggegeven.
+	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listLeerling(){
-		Iterable <Leerling> result = leerlingService.findAll();
+		System.out.println("Leerling - @GET: Got the list!");
+		List <LeerlingModelBasic> result = new ArrayList <>();
+		List <Leerling> leerlingen = (List<Leerling>) leerlingService.findAll();
+		for (Leerling leerling : leerlingen) {
+			result.add(new LeerlingModelBasic(leerling));
+		}
+		System.out.println("Leerling - @GET: Size ArrayList met leerlingen (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
+	/**
+	 * Verwijderen van de opgegeven Leerling (id).
+	 * @param 	id 	Id van de te verwijderen Leerling wordt uit het path gehaald.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response deleteLeerlingById(@PathParam("id") Long id){
-		this.leerlingService.deleteById(id);
-		return Response.accepted().build();
+		System.out.println("Leerling - pre@DELETE: id provided: " + id);
+		Leerling result = this.leerlingService.findById(id);
+		if (result == null) {
+			System.out.println("Leerling - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
+		} else {
+			this.leerlingService.deleteById(id);
+			return Response.accepted().build();
+		}
 	}
 
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putLeerling(Leerling leerling) {
-		this.leerlingService.save(leerling);
-		Leerling result = leerlingService.save(leerling);
-		return Response.accepted(result).build();
-	}
 	
-	////////CH
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/gebruikersnaam")
-	public Response postGebruikersnaamById(@PathParam("id") Long id, String gebruikersnaam) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setGebruikersnaam(gebruikersnaam);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/wachtwoord")
-	public Response postWachtwoordById(@PathParam("id") Long id, String wachtwoord) {
-		Leerling leerling = this.leerlingService.findById(id);
-		leerling.setWachtwoord(wachtwoord);
-		this.leerlingService.save(leerling);
-		return Response.accepted().build();
-	}
+	//Moet nog worden aangepast
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response putLeerling(Leerling leerling) {
+//		this.leerlingService.save(leerling);
+//		Leerling result = leerlingService.save(leerling);
+//		return Response.accepted(result).build();
+//	}
+	
 }

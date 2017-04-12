@@ -17,11 +17,19 @@ import org.springframework.stereotype.Component;
 import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.persistence.GroepService;
 
+/**
+ * Groepen http-methodes
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
 @Path("groep")
 @Component
 public class GroepEndpoint {
+	
 	@Autowired
 	private GroepService groepService;
+	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

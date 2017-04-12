@@ -69,11 +69,19 @@ public class Gebruiker {
 		this.gebruikersnaam = gebruikersnaam;
 	}
 	
-//	public String getWachtwoord() {
-//		return wachtwoord;
-//	}
-	
 	public void setWachtwoord(String wachtwoord) {
 		this.wachtwoord = wachtwoord;
 	}
+	
+	public boolean checkWachtwoord(Gebruiker gebruikerValidatie){
+		if(this.wachtwoord.equals(gebruikerValidatie.wachtwoord)){		
+			System.out.println(this.wachtwoord);
+			System.out.println(gebruikerValidatie.wachtwoord);
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
 }

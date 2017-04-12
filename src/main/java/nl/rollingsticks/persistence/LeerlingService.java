@@ -12,8 +12,8 @@ import nl.rollingsticks.domain.Leerling;
 @Service
 @Transactional
 public class LeerlingService {
-	@Autowired
 	
+	@Autowired
 	private LeerlingRepository leerlingRepository;
 
 	public Leerling save(Leerling leerling){

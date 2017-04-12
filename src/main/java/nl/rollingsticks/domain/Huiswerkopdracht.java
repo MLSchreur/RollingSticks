@@ -9,7 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -27,12 +27,12 @@ public class Huiswerkopdracht {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
-	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
-
 	private Date lesDatum;
 	private String notitie;
+
+	@ManyToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	private List<Muziekstuk> muziekstukken=new ArrayList<Muziekstuk>();
 
 	public long getId() {
 		return id;
@@ -40,14 +40,6 @@ public class Huiswerkopdracht {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public List<Muziekstuk> getMuziekstukken() {
-		return muziekstukken;
-	}
-
-	public void setMuziekstukken(List<Muziekstuk> muziekstukken) {
-		this.muziekstukken = muziekstukken;
 	}
 
 	public Date getLesDatum() {
@@ -66,11 +58,28 @@ public class Huiswerkopdracht {
 		this.notitie = notitie;
 	}
 	
-	public void addMuziekstukToMuziekstukken (Muziekstuk muziekstuk) {
+	public List<Muziekstuk> getMuziekstukken() {
+		return muziekstukken;
+	}
+
+	public void setMuziekstukken(List<Muziekstuk> muziekstukken) {
+		this.muziekstukken = muziekstukken;
+	}
+
+	public void addMuziekstukToMuziekstukken(Muziekstuk muziekstuk) {
 		this.muziekstukken.add(muziekstuk);
 	}
 	
-	public void removerMuziekstukFromMuziekstukken (Muziekstuk muziekstuk) {
+	public void removerMuziekstukFromMuziekstukken(Muziekstuk muziekstuk) {
 		this.muziekstukken.remove(muziekstuk);
+	}
+	
+	public boolean isLinkedMuziekstuk(Muziekstuk linkedMuziekstuk) {
+		for (Muziekstuk muziekstuk : muziekstukken) {
+			if (muziekstuk.getId() == linkedMuziekstuk.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

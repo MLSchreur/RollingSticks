@@ -17,6 +17,12 @@ import org.springframework.stereotype.Component;
 import nl.rollingsticks.domain.Tekst;
 import nl.rollingsticks.persistence.TekstService;
 
+/**
+ * Voor de aanvraag van verzoeken
+ * @author ProgramIT
+ * @version 0.1.0
+ * @since 2017-04-06
+ */
 @Path("verzoek")
 @Component
 public class TekstEndpoint {

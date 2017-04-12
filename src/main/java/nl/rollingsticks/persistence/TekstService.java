@@ -13,10 +13,6 @@ public class TekstService {
 	@Autowired
 	private TekstRepository tekstRepository;
 	
-//	public void save(Tekst tekst){
-//		tekstRepository.save(tekst);
-//	}
-//
 	public Tekst save(Tekst tekst){
 		return tekstRepository.save(tekst);
 	}
