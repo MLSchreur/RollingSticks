@@ -5,11 +5,15 @@ class Instrument {
 		this(nootNaam, "");
 	}
 	Instrument (String nootNaam, String instrumentNaam) {
+		this(nootNaam, instrumentNaam, "");
+	}
+	Instrument (String nootNaam, String instrumentNaam, String instrumentId) {
 		this.nootNaam = nootNaam;
 		this.instrumentNaam = instrumentNaam;
+		this.instrumentId = instrumentId;
 	}
 	
 	String nootNaam;
-	String instrumentId;
 	String instrumentNaam;
+	String instrumentId;
 }

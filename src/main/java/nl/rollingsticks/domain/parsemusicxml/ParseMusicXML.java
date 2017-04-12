@@ -329,7 +329,10 @@ public class ParseMusicXML {
 				return; // niet langer doorgaan dan nodig is.
 			}
 		}
+		// Instrument onbekend, maar wordt wel toegevoegd. Alleen de koppeling naar de naam v/d noot kan niet worden gelegd.
 		System.out.println("**** Probleem: onbekend muziekinstrument - " + instrumentIndexId + " - [" + instrumentIndexNaam + "]");
+		System.out.println(" -> Combi toevoegen aan index instrumenten, naam v/d noot wordt onbekend.");
+		instrumenten.add(new Instrument("onbekend", instrumentIndexNaam, instrumentIndexId));
 	}
 	
 	private Instrument opzoekenInstrument (String instrumentId) {
