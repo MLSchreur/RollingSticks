@@ -21,6 +21,7 @@ import nl.rollingsticks.domain.Docent;
 import nl.rollingsticks.domain.Gebruiker;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.persistence.DocentService;
+import nl.rollingsticks.persistence.GebruikerService;
 import nl.rollingsticks.persistence.LeerlingService;
 
 /**
@@ -36,7 +37,7 @@ public class DocentEndpoint {
 	private DocentService docentService;
 	
 	@Autowired
-	private LeerlingService leerlingService;
+	private GebruikerService gebruikerService;
 	
 	/**
 	 * Aanmaken van nieuwe docent
@@ -49,27 +50,14 @@ public class DocentEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postDocent(Docent docent){
-		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
-		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
-		List <Gebruiker> gebruikers = new ArrayList<>();
-		for (Leerling ll : leerlingen) {
-			gebruikers.add(ll);
+		boolean checkGebruikersnaam = gebruikerService.checkGebruikersnaam(docent);
+		System.out.println(checkGebruikersnaam);
+		if(!checkGebruikersnaam){
+			Docent result = docentService.save(docent);
+			return Response.accepted(result.getId()).build();
+		} else {
+			return Response.status(406).entity("Gebruikersnaam bestaat al").build();
 		}
-		for (Docent dcnt : docenten) {
-			gebruikers.add(dcnt);
-		}
-		if(gebruikers.size() != 0){
-			for(Gebruiker gebruiker: gebruikers){
-				if(gebruiker.getGebruikersnaam().equalsIgnoreCase(docent.getGebruikersnaam())){
-					System.out.println(docent.getGebruikersnaam() + " bestaat al!");
-					return Response.status(406).build();
-				}
-			}
-		}
-		System.out.println("Docent - pre@POST: " + docent.getId() + " - " + docent.getVoornaam() + " " + docent.getAchternaam());
-		Docent result = docentService.save(docent);		
-		System.out.println("Docent - @POST: " + result.getId() + " - " + result.getVoornaam() + " " + result.getAchternaam());
-		return Response.accepted(result.getId()).build();
 	}
 	
 	/**

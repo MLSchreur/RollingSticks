@@ -19,9 +19,12 @@ import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Docent;
 import nl.rollingsticks.domain.Gebruiker;
+import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.LeerlingModelBasic;
 import nl.rollingsticks.persistence.DocentService;
+import nl.rollingsticks.persistence.GebruikerService;
+import nl.rollingsticks.persistence.GroepService;
 import nl.rollingsticks.persistence.LeerlingService;
 
 /**
@@ -39,40 +42,44 @@ public class LeerlingEndpoint {
 	private LeerlingService leerlingService;
 	
 	@Autowired
-	private DocentService docentService;
+	private GebruikerService gebruikerService;
+	
+	@Autowired
+	private GroepService groepService;
 	
 	/**
 	 * Aanmaken van nieuwe leerling
 	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 			Code 406 (Not acceptable) - gebruikersnaam bestaat al<br>
+	 * 			Code 406 (Not acceptable) - 1 = heeft al een idee<br>
+	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
+	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al<br>
 	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postLeerling(Leerling leerling){
-		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
-		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
-		List <Gebruiker> gebruikers = new ArrayList<>();
-		for (Leerling ll : leerlingen) {
-			gebruikers.add(ll);
-		}
-		for (Docent docent : docenten) {
-			gebruikers.add(docent);
-		}
-		if(gebruikers.size() != 0){
-			for(Gebruiker gebruiker: gebruikers){
-				if(gebruiker.getGebruikersnaam().equalsIgnoreCase(leerling.getGebruikersnaam())){
-					System.out.println(leerling.getGebruikersnaam() + " bestaat al!");
-					return Response.status(406).build();
+		boolean checkGebruikersnaam = gebruikerService.checkGebruikersnaam(leerling);
+		System.out.println(checkGebruikersnaam);
+		if(leerling.getId() == 0){
+			if (leerling.getAchternaam() != null && leerling.getVoornaam() != null && leerling.getGebruikersnaam() != null ){
+				if(!checkGebruikersnaam){
+					System.out.println("gebruikersnaam bestaat niet");
+					Leerling result = leerlingService.save(leerling);
+					return Response.accepted(result.getId()).build();
+				} else {
+					System.out.println("gebruikersnaam bestaal al");
+					return Response.status(406).entity(1).build();
 				}
+			} else {
+				System.out.println("Niet alles ingevuld");
+				return Response.status(406).entity(2).build();
 			}
+		}else{
+			System.out.println("Heeft al een id");
+			return Response.status(406).entity(3).build();
 		}
-		System.out.println("Leerling - pre@POST: " + leerling.getId() + " - " + leerling.getVoornaam() + " " + leerling.getAchternaam());
-		Leerling result = leerlingService.save(leerling);		
-		System.out.println("Leerling - @POST: " + result.getId() + " - " + result.getVoornaam() + " " + result.getAchternaam());
-		return Response.accepted(result.getId()).build();
 	}
 	
 	/**
@@ -89,12 +96,12 @@ public class LeerlingEndpoint {
 	public Response getLeerlingById(@PathParam("id") Long id ) {
 		System.out.println("Leerling - pre@GET: (" + id + ")");
 		Leerling leerling = this.leerlingService.findById(id);
-		if (leerling == null){
-			System.out.println("Leerling - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
-		} else {
+		if (leerling != null){
 			LeerlingModelBasic result = new LeerlingModelBasic(leerling);
 			return Response.ok(result).build();
+		} else {
+			System.out.println("Leerling - Id " + id + " bestaat niet.");
+			return Response.noContent().build();
 		}
 	}
 	
@@ -137,15 +144,26 @@ public class LeerlingEndpoint {
 		}
 	}
 
+	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/groep/{groep_id}")
+	public Response addGroepToLeerling(@PathParam("id") Long id, @PathParam("groep_id") Long groepId) {
+		Leerling leerling = leerlingService.findById(id);
+		if(leerling != null){
+			Groep groep = groepService.findById(groepId);
+			if(groep != null){
+				leerling.addGroep(groep);
+				System.out.println(leerling.getId());
+				leerlingService.save(leerling);
+				return Response.accepted().build();
+			} else {
+				return Response.status(406).entity(2).build();
+			}
+		} else {
+			return Response.status(406).entity(1).build();
+		}
+	}
 	
-	//Moet nog worden aangepast
-//	@PUT
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response putLeerling(Leerling leerling) {
-//		this.leerlingService.save(leerling);
-//		Leerling result = leerlingService.save(leerling);
-//		return Response.accepted(result).build();
-//	}
+	
 	
 }
