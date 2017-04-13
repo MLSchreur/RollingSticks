@@ -1,6 +1,7 @@
 package nl.rollingsticks.rest.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,9 +19,11 @@ import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Huiswerkopdracht;
+import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.GroepModelBasic;
 import nl.rollingsticks.persistence.GroepService;
 import nl.rollingsticks.persistence.HuiswerkopdrachtService;
+import nl.rollingsticks.persistence.LeerlingService;
 
 /**
  * Groepen http-methodes
@@ -34,6 +37,9 @@ public class GroepEndpoint {
 	
 	@Autowired
 	private GroepService groepService;
+	
+	@Autowired
+	private LeerlingService leerlingService;
 	
 	@Autowired
 	private HuiswerkopdrachtService huiswerkopdrachtService;
@@ -105,6 +111,34 @@ public class GroepEndpoint {
 		}
 		System.out.println("Groep - @GET: Size ArrayList met groepen (Model): " + result.size());
 		return Response.ok(result).build();
+	}
+	
+	/**
+	 * Verwijderen van de opgegeven Groep (id) inclusief de koppelingen met de leerlingen en huiswerkopdrachten.
+	 * @param 	id 	Id van de te verwijderen Leerling wordt uit het path gehaald.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */
+	@DELETE
+	@Path("{id}")
+	public Response deleteGroep(@PathParam("id") Long id){
+			Groep groep = groepService.findById(id);
+			if(groep != null){
+				System.out.println("groep met id " + id + " bestaat.");
+				List<Leerling> leerlingen = groep.getLeerlingen();
+				if (leerlingen.size() != 0){
+					for (Leerling leerling : leerlingen) {
+						leerlingService.removeGroepFromLeerling(leerling.getId(), id);
+						System.out.println("Leerling met id "+ leerling.getId() + " verwijderd.");
+						leerlingService.save(leerling);
+					}
+				}
+				groepService.deleteById(id);
+				System.out.println("Groep verwijderd");
+				return Response.accepted().build();
+			} else {
+				return Response.noContent().build();
+			}
 	}
 	
 	/**

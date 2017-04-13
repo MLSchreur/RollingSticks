@@ -53,6 +53,19 @@ public class Groep {
 	public void setLeerlingen(List<Leerling> leerlingen) {
 		this.leerlingen = leerlingen;
 	}
+	
+	public void removeLeerlingFromLeerlingen(Leerling leerling) {
+		this.leerlingen.remove(leerling);
+	}
+	
+	public boolean isLinkedLeerling(Leerling linkedLeerling) {
+		for (Leerling leerling : leerlingen) {
+			if (leerling.getId() == linkedLeerling.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public List<Huiswerkopdracht> getHuiswerkopdrachten() {
 		return huiswerkopdrachten;

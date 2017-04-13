@@ -36,4 +36,17 @@ public class Leerling extends Gebruiker {
 		this.groepen.add(groep);
 	
 	}
+	
+	public void removeGroepFromGroepen(Groep groep) {
+		this.groepen.remove(groep);
+	}
+	
+	public boolean isLinkedGroep(Groep linkedGroep) {
+		for (Groep groep : groepen) {
+			if (groep.getId() == linkedGroep.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
