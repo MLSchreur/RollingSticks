@@ -1,5 +1,7 @@
 package nl.rollingsticks.rest.service;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Groep;
+import nl.rollingsticks.domain.model.GroepModelBasic;
 import nl.rollingsticks.persistence.GroepService;
 
 /**
@@ -39,18 +42,46 @@ public class GroepEndpoint {
 		return Response.accepted(result).build();
 	}
 	
+	/**
+	 * Opvragen van de groepen.
+	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
+	 * @param 	id 	Id van de Groepen wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 406 (Not Acceptable) - 1 = Groep met opgegeven id bestaat niet.<br>
+	 * 			Opgevraagde Groep wordt als JSON object teruggegeven.<br>
+	 * 			Huiswerkopdrachten en Leerlingen kunnen via api's van huiswerkopdracht en leerling verder opgevraagd worden.<br>
+	 * 			Voorbeeld: { "id": 1, "naam":"maandag 12:00", "huiswerkopdrachten": [ 1, 2, 3 ], "leerlingen": [ 1, 2, 3 ] }
+	 */	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response getGroepById(@PathParam("id") Long id ) {
-		Groep result = this.groepService.findById(id);
-		return Response.ok(result).build();
+		System.out.println("Groep - pre@GET: (" + id + ")");
+		Groep groep = this.groepService.findById(id);
+		if(groep != null){
+			GroepModelBasic result = new GroepModelBasic(groep);
+			System.out.println("Groep - @GET: (" + id + ") " + groep.getNaam());
+			return Response.ok(result).build();	
+		} else {
+			return Response.status(406).entity(1).build();
+		}
 	}
 	
+	/**
+	 * Opvragen van alle Groepen.
+	 * @return 	Code 200 (OK)<br>
+	 * 			Alle Groepen worden als JSON objecten teruggegeven.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listGroep(){
-		Iterable <Groep> result = groepService.findAll();
+		System.out.println("@GET: Got the list!");
+		Iterable <Groep> groepen = groepService.findAll();
+		ArrayList<GroepModelBasic> result = new ArrayList<>();
+		for (Groep groep : groepen) {
+			result.add(new GroepModelBasic(groep));
+		}
+		System.out.println("Groep - @GET: Size ArrayList met groepen (Model): " + result.size());
 		return Response.ok(result).build();
 	}
 	
