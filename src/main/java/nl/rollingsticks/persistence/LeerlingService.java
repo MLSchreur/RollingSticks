@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import nl.rollingsticks.domain.Groep;
+import nl.rollingsticks.domain.Huiswerkopdracht;
 import nl.rollingsticks.domain.Leerling;
 
 @Service
@@ -83,6 +84,41 @@ public class LeerlingService {
 			}
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * Verwijderen van koppeling tussen Groep(id) met Leerling (id).
+	 * @param 	id 					Id van de Leerling waar een Groep van verwijderd moet worden.
+	 * @param	huiswerkopdrachtId	Groep die verwijderd moet worden van Leerling (id).
+	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
+	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
+	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>
+	 * 		 	3 = Groep met opgegeven id is niet gekoppeld aan de Leerling.
+	 */
+	public int removeGroepFromLeerling(long id, long groepId){
+		Leerling leerling = this.findById(id);
+		if(leerling != null ){
+			System.out.println("Leerling met id " + id + " bestaat.");
+			Groep groep = groepService.findById(groepId);
+			if(groep != null){
+				System.out.println("Groep met id " + groepId + " bestaat.");
+				if(leerling.isLinkedGroep(groep)){
+					leerling.removeGroepFromGroepen(groep);
+					this.save(leerling);
+					System.out.println("Koppeling tussen groep met id " + groepId + " en leerling met id " + id + " is verwijderd");
+					return 0;
+				} else {
+					System.out.println("Groep met id " + groepId + " is niet gekoppeld met leerling met id " + id);
+					return 3;
+				}
+			} else {
+				System.out.println("Groep met id " + groepId + " bestaat niet .");
+				return 2;
+			}
+		} else {
+			System.out.println("Leerling met id " + id + " bestaat niet.");
+			return 1;
 		}
 	}
 }

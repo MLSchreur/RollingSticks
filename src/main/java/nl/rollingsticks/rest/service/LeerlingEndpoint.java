@@ -70,15 +70,15 @@ public class LeerlingEndpoint {
 					return Response.accepted(result.getId()).build();
 				} else {
 					System.out.println("gebruikersnaam bestaal al");
-					return Response.status(406).entity(1).build();
+					return Response.status(406).entity("1").build();
 				}
 			} else {
 				System.out.println("Niet alles ingevuld");
-				return Response.status(406).entity(2).build();
+				return Response.status(406).entity("2").build();
 			}
 		}else{
 			System.out.println("Heeft al een id");
-			return Response.status(406).entity(3).build();
+			return Response.status(406).entity("3").build();
 		}
 	}
 	
@@ -124,26 +124,55 @@ public class LeerlingEndpoint {
 	}
 	
 	/**
-	 * Verwijderen van de opgegeven Leerling (id).
+	 * Verwijderen van de opgegeven Leerling (id) inclusief de koppelingen met de groepen.
 	 * @param 	id 	Id van de te verwijderen Leerling wordt uit het path gehaald.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 		 	Code 204 (No Content)
 	 */	
 	@DELETE
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response deleteLeerlingById(@PathParam("id") Long id){
-		System.out.println("Leerling - pre@DELETE: id provided: " + id);
-		Leerling result = this.leerlingService.findById(id);
-		if (result == null) {
-			System.out.println("Leerling - Id " + id + " bestaat niet.");
-			return Response.noContent().build();
-		} else {
-			this.leerlingService.deleteById(id);
+		Leerling leerling = leerlingService.findById(id);
+		if(leerling != null){
+			leerlingService.deleteById(id);
 			return Response.accepted().build();
+		} else {
+			return Response.noContent().build();
 		}
 	}
-
+	
+	/**
+	 * Verwijderen van koppeling tussen Groep(id) met Leerling (id).
+	 * @param 	id 					Id van de Leerling waar een Groep van verwijderd moet worden.
+	 * @param	huiswerkopdrachtId	Groep die verwijderd moet worden van Leerling (id).
+	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
+	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
+	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>
+	 * 		 	3 = Groep met opgegeven id is niet gekoppeld aan de Leerling.
+	 */
+	@DELETE
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/groep/{groep_id}")
+	public Response removeGroepFromLeerling(@PathParam("id") Long id, @PathParam("groep_id") Long groepId){
+		int removeGroep = leerlingService.removeGroepFromLeerling(id, groepId);
+		switch(removeGroep){
+		case 0: return Response.accepted().build();
+		case 1: return Response.status(406).entity(removeGroep).build();
+		case 2: return Response.status(406).entity(removeGroep).build();
+		case 3: return Response.status(406).entity(removeGroep).build();
+		default: return Response.status(406).build();
+		}
+	}
+	
+	/**
+	 * Aanmaken van koppeling tussen Groep(id) met Leerling (id).
+	 * @param 	id 					Id van de Leerling waar een Groep aan toegevoegd moet worden.
+	 * @param	huiswerkopdrachtId	Groep die toegevoegd moet worden aan Leerling (id).
+	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
+	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
+	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>
+	 * 		 	3 = Groep met opgegeven id is al gekoppeld aan de Leerling.
+	 */
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/groep/{groep_id}")
@@ -152,15 +181,19 @@ public class LeerlingEndpoint {
 		if(leerling != null){
 			Groep groep = groepService.findById(groepId);
 			if(groep != null){
-				leerling.addGroep(groep);
-				System.out.println(leerling.getId());
-				leerlingService.save(leerling);
-				return Response.accepted().build();
+				if(!leerling.isLinkedGroep(groep)){
+					leerling.addGroep(groep);
+					System.out.println(leerling.getId());
+					leerlingService.save(leerling);
+					return Response.accepted().build();
+				} else {
+					return Response.status(406).entity("3").build();
+				}
 			} else {
-				return Response.status(406).entity(2).build();
+				return Response.status(406).entity("2").build();
 			}
 		} else {
-			return Response.status(406).entity(1).build();
+			return Response.status(406).entity("1").build();
 		}
 	}
 	
