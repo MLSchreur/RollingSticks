@@ -61,6 +61,23 @@ public class Groep {
 	public void setHuiswerkopdrachten(List<Huiswerkopdracht> huiswerkopdrachten) {
 		this.huiswerkopdrachten = huiswerkopdrachten;
 	}
+	
+	public boolean isLinkedHuiswerkopdracht(Huiswerkopdracht linkedHuiswerkopdracht) {
+		for (Huiswerkopdracht huiswerkopdracht : huiswerkopdrachten) {
+			if (huiswerkopdracht.getId() == linkedHuiswerkopdracht.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void addHuiswerkopdrachtToHuiswerkopdrachten(Huiswerkopdracht huiswerkopdracht) {
+		this.huiswerkopdrachten.add(huiswerkopdracht);
+	}
+	
+	public void removeHuiswerkopdrachtFromHuiswerkopdrachten(Huiswerkopdracht huiswerkopdracht) {
+		this.huiswerkopdrachten.remove(huiswerkopdracht);
+	}
 
 	public String getNaam() {
 		return naam;

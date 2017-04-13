@@ -17,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Groep;
+import nl.rollingsticks.domain.Huiswerkopdracht;
 import nl.rollingsticks.domain.model.GroepModelBasic;
 import nl.rollingsticks.persistence.GroepService;
+import nl.rollingsticks.persistence.HuiswerkopdrachtService;
 
 /**
  * Groepen http-methodes
@@ -33,13 +35,33 @@ public class GroepEndpoint {
 	@Autowired
 	private GroepService groepService;
 	
+	@Autowired
+	private HuiswerkopdrachtService huiswerkopdrachtService;
 	
+	/**
+	 * Cre&euml;er een nieuwe Groep.
+	 * @param 	groep Cre&euml;ren van nieuwe Groep.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 			Code 406 () - 1 Groepsnaam bestaat al <br>
+	 * 			Id van opgeslagen groep wordt als text_plain teruggegeven.
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postGroep(Groep groep){
+		ArrayList <Groep> groepen = (ArrayList<Groep>) groepService.findAll();
+		if (groepen != null) {
+			for (Groep grp : groepen) {
+				if(grp.getNaam().equalsIgnoreCase(groep.getNaam())){
+					System.out.println(groep.getNaam() + " bestaat al.");
+					return Response.status(406).entity(1).build();
+				}
+			}
+		} 
+		System.out.println("Groep - pre@POST: " + groep.getId() + " - " + groep.getNaam());
 		Groep result = groepService.save(groep);
-		return Response.accepted(result).build();
+		System.out.println("Groep - @POST: " + groep.getId() + " - " + groep.getNaam());
+		return Response.accepted(result.getId()).build();	
 	}
 	
 	/**
@@ -85,20 +107,66 @@ public class GroepEndpoint {
 		return Response.ok(result).build();
 	}
 	
+	/**
+	 * Verwijderen van koppeling tussen Huiswerkopdracht(id) met Groep (id).
+	 * @param 	id 					Id van de Groep waar een Huiswerkopdracht van verwijderd moet worden.
+	 * @param	huiswerkopdrachtId	Huiswerkopdracht die verwijderd moet worden van groep (id).
+	 * @return 	0 = Groep en Huiswerkopdracht zijn gekoppeld<br>
+	 * 		 	1 = Groep met opgegeven id bestaat niet.<br>
+	 * 		 	2 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
+	 * 		 	3 = Huiswerkopdracht met opgegeven id is niet gekoppeld aan de Groep.
+	 */
 	@DELETE
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public Response deleteTekstById(@PathParam("id") Long id){
-		this.groepService.deleteById(id);
-		return Response.accepted().build();
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/huiswerkopdracht/{huiswerkopdracht_id}")
+	public Response removeHuiswerkopdrachtFromGroep(
+			@PathParam("id") Long id, 
+			@PathParam("huiswerkopdracht_id") Long huiswerkopdrachtId){
+		int removeHuiswerkopdracht = groepService.removeHuiswerkopdrachtFromGroep(id, huiswerkopdrachtId);
+		switch(removeHuiswerkopdracht){
+		case 0: return Response.accepted().build();
+		case 1: return Response.status(406).entity(removeHuiswerkopdracht).build();
+		case 2: return Response.status(406).entity(removeHuiswerkopdracht).build();
+		case 3: return Response.status(406).entity(removeHuiswerkopdracht).build();
+		default: return Response.status(406).entity("onbekende fout").build();
+		}
 	}
-
+	
+	/**
+	 * Toevoegen van een <b>bestaande</b> Huiswerkopdracht aan opgegeven Groep (id).
+	 * @param 	id 					Id van de Groep waar een Huiswerkopdracht aan toegevoegd moet worden.
+	 * @param	huiswerkopdrachtId	Huiswerkopdracht dat opgeslagen en gekoppeld moet worden aan de Groep (id).
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 406 (Not Acceptable) - 1 = Groep met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 2 = Huiswerkopdracht met opgegeven id bestaat niet.<br>
+	 * 		 	Code 406 (Not Acceptable) - 3 = Huiswerkopdracht met opgegeven id is al gekoppeld aan de Groep.
+	 */
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response putTekst(Groep groep) {
-		this.groepService.save(groep);
-		Groep result = groepService.save(groep);
-		return Response.accepted(result).build();
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/huiswerkopdracht/{huiswerkopdracht_id}")
+	public Response addHuiswerkopdrachtToGroep(@PathParam("id") Long id, @PathParam("huiswerkopdracht_id") Long huiswerkopdrachtId) {
+		Groep groep = groepService.findById(id);
+		if(groep != null){
+			System.out.println("Groep met id " + id + " bestaat.");
+			Huiswerkopdracht huiswerkopdracht = huiswerkopdrachtService.findById(huiswerkopdrachtId);
+			if (huiswerkopdracht != null){
+				System.out.println("Huiswerkopdracht met id " + huiswerkopdrachtId + " bestaat.");
+				if(!groep.isLinkedHuiswerkopdracht(huiswerkopdracht)){
+					System.out.println("Huiswerkopdracht met id " + huiswerkopdrachtId + " is nog niet gelinkt aan groep met id " + id);
+					groep.addHuiswerkopdrachtToHuiswerkopdrachten(huiswerkopdracht);
+					groepService.save(groep);
+					return Response.accepted().build();
+				} else {
+					System.out.println("Huiswerkopdracht met id " + huiswerkopdrachtId + " is al gelinkt aan groep met id " + id);
+					return Response.status(406).entity(3).build();
+				}
+			} else {
+				System.out.println("Huiswerkopdracht met id " + huiswerkopdrachtId + " bestaat niet.");
+				return Response.status(406).entity(2).build();
+			}
+		} else {
+			System.out.println("Groep met id " + id + " bestaat niet.");
+			return Response.status(406).entity(1).build();
+		}
 	}
 }
