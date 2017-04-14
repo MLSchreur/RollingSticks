@@ -48,19 +48,27 @@ public class GroepEndpoint {
 	 * Cre&euml;er een nieuwe Groep.
 	 * @param 	groep Cre&euml;ren van nieuwe Groep.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 			Code 406 () - 1 Groepsnaam bestaat al <br>
+	 * 	 		Code 406 () - 1 Groepsnaam niet ingevuld<br>
+	 * 			Code 406 () - 2 Groepsnaam bestaat al <br>
 	 * 			Id van opgeslagen groep wordt als text_plain teruggegeven.
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postGroep(Groep groep){
+		if(groep.getNaam() == null){
+			return Response.status(406).entity(1).build();
+		}
+		System.out.println(1);
 		ArrayList <Groep> groepen = (ArrayList<Groep>) groepService.findAll();
+		System.out.println(2);
 		if (groepen != null) {
+			System.out.println(3);
 			for (Groep grp : groepen) {
+				System.out.println(4);
 				if(grp.getNaam().equalsIgnoreCase(groep.getNaam())){
 					System.out.println(groep.getNaam() + " bestaat al.");
-					return Response.status(406).entity(1).build();
+					return Response.status(406).entity(2).build();
 				}
 			}
 		} 

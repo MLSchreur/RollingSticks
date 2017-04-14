@@ -13,7 +13,7 @@ public class GroepModelBasic {
 		this.groep = groep;
 	}
 	
-	public String getAchternaam(){
+	public String getNaam(){
 		return this.groep.getNaam();
 	}
 	

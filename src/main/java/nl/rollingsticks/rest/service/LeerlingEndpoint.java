@@ -17,12 +17,9 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import nl.rollingsticks.domain.Docent;
-import nl.rollingsticks.domain.Gebruiker;
 import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.LeerlingModelBasic;
-import nl.rollingsticks.persistence.DocentService;
 import nl.rollingsticks.persistence.GebruikerService;
 import nl.rollingsticks.persistence.GroepService;
 import nl.rollingsticks.persistence.LeerlingService;
@@ -37,51 +34,41 @@ import nl.rollingsticks.persistence.LeerlingService;
 @Path("leerling")
 @Component
 public class LeerlingEndpoint {
-	
+
 	@Autowired
 	private LeerlingService leerlingService;
-	
+
 	@Autowired
 	private GebruikerService gebruikerService;
-	
+
 	@Autowired
 	private GroepService groepService;
-	
+
 	/**
 	 * Aanmaken van nieuwe leerling
 	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 			Code 406 (Not acceptable) - 1 = heeft al een idee<br>
+	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
 	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
-	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al<br>
-	 * 			Id van opgeslagen leerling wordt als text_plain teruggegeven.
+	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postLeerling(Leerling leerling){
-		boolean checkGebruikersnaam = gebruikerService.checkGebruikersnaam(leerling);
-		System.out.println(checkGebruikersnaam);
-		if(leerling.getId() == 0){
-			if (leerling.getAchternaam() != null && leerling.getVoornaam() != null && leerling.getGebruikersnaam() != null ){
-				if(!checkGebruikersnaam){
-					System.out.println("gebruikersnaam bestaat niet");
-					Leerling result = leerlingService.save(leerling);
-					return Response.accepted(result.getId()).build();
-				} else {
-					System.out.println("gebruikersnaam bestaal al");
-					return Response.status(406).entity("1").build();
-				}
-			} else {
-				System.out.println("Niet alles ingevuld");
-				return Response.status(406).entity("2").build();
-			}
-		}else{
-			System.out.println("Heeft al een id");
-			return Response.status(406).entity("3").build();
+		int gebruikerCheck = gebruikerService.postGebruiker(leerling);
+		switch(gebruikerCheck){
+		case 0: 
+			leerlingService.save(leerling);
+			System.out.println("leerling opgeslagen"); 
+			return Response.accepted().build();
+		case 1: System.out.println("Heeft al een id"); return Response.status(406).entity(1).build();
+		case 2: System.out.println("Ontbrekende gegevens"); return Response.status(406).entity(2).build();
+		case 3: System.out.println("Gebruikersnaam bestaat al"); return Response.status(406).entity(3).build();
+		default: System.out.println("Onbekende return."); return Response.status(406).build();	
 		}
 	}
-	
+
 	/**
 	 * Opvragen van de leerling.
 	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
@@ -104,7 +91,7 @@ public class LeerlingEndpoint {
 			return Response.noContent().build();
 		}
 	}
-	
+
 	/**
 	 * Opvragen van alle leerlingen.
 	 * @return 	Code 200 (OK)<br>
@@ -122,7 +109,7 @@ public class LeerlingEndpoint {
 		System.out.println("Leerling - @GET: Size ArrayList met leerlingen (Model): " + result.size());
 		return Response.ok(result).build();
 	}
-	
+
 	/**
 	 * Verwijderen van de opgegeven Leerling (id) inclusief de koppelingen met de groepen.
 	 * @param 	id 	Id van de te verwijderen Leerling wordt uit het path gehaald.
@@ -140,7 +127,7 @@ public class LeerlingEndpoint {
 			return Response.noContent().build();
 		}
 	}
-	
+
 	/**
 	 * Verwijderen van koppeling tussen Groep(id) met Leerling (id).
 	 * @param 	id 					Id van de Leerling waar een Groep van verwijderd moet worden.
@@ -163,7 +150,7 @@ public class LeerlingEndpoint {
 		default: return Response.status(406).build();
 		}
 	}
-	
+
 	/**
 	 * Aanmaken van koppeling tussen Groep(id) met Leerling (id).
 	 * @param 	id 					Id van de Leerling waar een Groep aan toegevoegd moet worden.
@@ -196,7 +183,7 @@ public class LeerlingEndpoint {
 			return Response.status(406).entity("1").build();
 		}
 	}
-	
-	
-	
+
+
+
 }

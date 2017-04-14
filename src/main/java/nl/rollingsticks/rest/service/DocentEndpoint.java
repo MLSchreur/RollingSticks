@@ -1,13 +1,12 @@
 package nl.rollingsticks.rest.service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.rollingsticks.domain.Docent;
-import nl.rollingsticks.domain.Gebruiker;
-import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.persistence.DocentService;
 import nl.rollingsticks.persistence.GebruikerService;
-import nl.rollingsticks.persistence.LeerlingService;
 
 /**
  * Docent http-methodes
@@ -41,22 +37,26 @@ public class DocentEndpoint {
 	
 	/**
 	 * Aanmaken van nieuwe docent
-	 * @param	docent Cre&euml;ren van een nieuwe Docent.
+	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
 	 * @return 	Code 202 (Accepted)<br>
-	 * 			Code 406 (Not acceptable) - gebruikersnaam bestaat al<br>
-	 * 			Id van opgeslagen docent wordt als text_plain teruggegeven.
+	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
+	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
+	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postDocent(Docent docent){
-		boolean checkGebruikersnaam = gebruikerService.checkGebruikersnaam(docent);
-		System.out.println(checkGebruikersnaam);
-		if(!checkGebruikersnaam){
-			Docent result = docentService.save(docent);
-			return Response.accepted(result.getId()).build();
-		} else {
-			return Response.status(406).entity("Gebruikersnaam bestaat al").build();
+		int gebruikerCheck = gebruikerService.postGebruiker(docent);
+		switch(gebruikerCheck){
+		case 0: 
+			docentService.save(docent);
+			System.out.println("Docent opgeslagen"); 
+			return Response.accepted().build();
+		case 1: System.out.println("Heeft al een id"); return Response.status(406).entity(1).build();
+		case 2: System.out.println("Ontbrekende gegevens"); return Response.status(406).entity(2).build();
+		case 3: System.out.println("Gebruikersnaam bestaat al"); return Response.status(406).entity(3).build();
+		default: System.out.println("Onbekende return."); return Response.status(406).build();	
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class DocentEndpoint {
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response deleteLeerlingById(@PathParam("id") Long id){
+	public Response deleteDocentById(@PathParam("id") Long id){
 		System.out.println("Docent - pre@DELETE: id provided: " + id);
 		Docent result = this.docentService.findById(id);
 		if (result == null) {
@@ -116,7 +116,7 @@ public class DocentEndpoint {
 		}
 	}
 	
-	//Moet nog worden aangepast
+//	Moet nog worden aangepast
 //	@PUT
 //	@Consumes(MediaType.APPLICATION_JSON)
 //	@Produces(MediaType.APPLICATION_JSON)
