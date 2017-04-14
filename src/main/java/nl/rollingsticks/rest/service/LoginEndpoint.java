@@ -1,8 +1,5 @@
 package nl.rollingsticks.rest.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,11 +10,9 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import nl.rollingsticks.domain.Docent;
 import nl.rollingsticks.domain.Gebruiker;
-import nl.rollingsticks.domain.Leerling;
-import nl.rollingsticks.persistence.DocentService;
-import nl.rollingsticks.persistence.LeerlingService;
+import nl.rollingsticks.persistence.GebruikerService;
+
 
 /**
  * Check op Inloggegevens
@@ -29,49 +24,40 @@ import nl.rollingsticks.persistence.LeerlingService;
 @Path("login")
 @Component
 public class LoginEndpoint {
-	
+
 	@Autowired
-	private LeerlingService leerlingService;
-	
-	@Autowired
-	private DocentService docentService;
-	
+	private GebruikerService gebruikerService;
+
 	/**
 	 * Controleren van gebruikersnaam en wachtwoord bij inloggen
 	 * @param	gebruikerValidatie	Een JSON-object van type Gebruiker(Leerling of Docent) waarin gebruikersnaam en wachtwoord moeten worden meegegeven
-	 * @return 	Code 200 (OK) - 1 = Docent<br>
-	 * 			Code 200 (OK) - 2 = Leerling<br>
-	 * 		 	Code 406 (Not Acceptable) - Ongeldige gebruikersnaam of gebruikersnaam/wachtwoord combinatie opgegeven.
+	 * @return 	Code 200 (OK) - id = D staat voor Docent en L voor Leerling gevolgd door id van de gebruiker<br>
+	 * 			Code 406 (Not Acceptable) - 1 = Object is null
+	 * 			Code 406 (Not Acceptable) - 2 = gebruiker bestaat niet
+	 * 			Code 406 (Not Acceptable) - 3 = wachtwoord kont niet overeen
 	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response listGebruikers(Gebruiker gebruikerValidatie) {
-		List <Leerling> leerlingen = (ArrayList <Leerling>)leerlingService.findAll();
-		List <Gebruiker> gebruikers = new ArrayList<>();
-		List <Docent> docenten = (ArrayList<Docent>) docentService.findAll();
-		for (Leerling leerling : leerlingen) {
-			gebruikers.add(leerling);
-		}
-		for (Docent docent : docenten) {
-			gebruikers.add(docent);
-		}
-		for (Gebruiker gebruiker : gebruikers) {
-			if (gebruiker.getGebruikersnaam().equals(gebruikerValidatie.getGebruikersnaam())) {
-				if (gebruiker.checkWachtwoord(gebruikerValidatie)) {
-					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is ok!");
-					if (gebruiker.getClass().getSimpleName().equals("Docent")){
-						return Response.ok(1).build();
-					} else if (gebruiker.getClass().getSimpleName().equals("Leerling")){
-						return Response.ok(2).build();
+	public Response listGebruikers(Gebruiker gebruiker) {
+		if(gebruiker != null){
+			Gebruiker checkGebruikersnaam = gebruikerService.checkGebruikersnaam(gebruiker);
+			if(checkGebruikersnaam != null){
+				if(checkGebruikersnaam.checkWachtwoord(gebruiker)){
+					if(checkGebruikersnaam.getClass().getSimpleName().equalsIgnoreCase("docent")){
+						return Response.ok("D"+checkGebruikersnaam.getId()).build();
+					} else {
+						return Response.ok("L"+checkGebruikersnaam.getId()).build();
 					}
 				} else {
-					System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is niet ok!");
-					return Response.status(406).build();
+					return Response.status(406).entity(3).build();
 				}
+			} else {
+				return Response.status(406).entity(2).build();
 			}
+
+		} else {
+			return Response.status(406).entity(1).build();
 		}
-		System.out.println("Gebruiker:" + gebruikerValidatie.getGebruikersnaam() + " is niet gevonden.");
-		return Response.status(406).build();
 	}
 }
