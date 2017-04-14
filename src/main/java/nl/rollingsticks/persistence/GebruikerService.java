@@ -53,4 +53,23 @@ public class GebruikerService {
 		return 0;
 	}
 
+	/**
+	 * Controle of gebruikersnaam bestaat
+	 * @param validateGebruiker
+	 * @return 	0   = gebruikersnaam bestaat niet
+	 * 			1 	= gebruiker is docent
+	 * 			2	= gebruiker is leerling
+	 */
+	public Gebruiker checkGebruikersnaam(Gebruiker validateGebruiker){
+		List <Gebruiker> gebruikers = new ArrayList<>();
+		gebruikers.addAll((ArrayList<Leerling>)leerlingService.findAll());
+		gebruikers.addAll((ArrayList<Docent>) docentService.findAll());
+		for(Gebruiker gebruiker:gebruikers){
+			if(validateGebruiker.getGebruikersnaam().equalsIgnoreCase(gebruiker.getGebruikersnaam())){
+				return gebruiker;
+			}
+		}
+		return null;
+	}
+
 }
