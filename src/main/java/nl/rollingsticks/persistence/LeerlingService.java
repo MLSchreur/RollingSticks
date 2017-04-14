@@ -1,16 +1,12 @@
 package nl.rollingsticks.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import nl.rollingsticks.domain.Groep;
-import nl.rollingsticks.domain.Huiswerkopdracht;
 import nl.rollingsticks.domain.Leerling;
 
 @Service
