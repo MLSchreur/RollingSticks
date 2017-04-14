@@ -37,7 +37,7 @@ public class GebruikerService {
 
 			System.out.println("Niet alles ingevuld");
 			return 2;
-		} 
+		}
 		List <Gebruiker> gebruikers = new ArrayList<>();
 		gebruikers.addAll((ArrayList<Leerling>)leerlingService.findAll());
 		gebruikers.addAll((ArrayList<Docent>) docentService.findAll());

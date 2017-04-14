@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import nl.rollingsticks.domain.Groep;
 import nl.rollingsticks.domain.Leerling;
 import nl.rollingsticks.domain.model.LeerlingModelBasic;
+import nl.rollingsticks.domain.model.LeerlingModelWachtwoord;
 import nl.rollingsticks.persistence.GebruikerService;
 import nl.rollingsticks.persistence.GroepService;
 import nl.rollingsticks.persistence.LeerlingService;
@@ -182,6 +183,19 @@ public class LeerlingEndpoint {
 		} else {
 			return Response.status(406).entity("1").build();
 		}
+	}
+	
+	//Tijdelijke functie voor het verkrijgen van alle wachtwoorden
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("wachtwoord")
+	public Response getWachtwoorden(){
+		List <Leerling> leerlingen = (List<Leerling>) leerlingService.findAll();
+		List <LeerlingModelWachtwoord> result = new ArrayList <>();
+		for(Leerling leerling:leerlingen){
+			result.add(new LeerlingModelWachtwoord(leerling));
+		}
+		return Response.accepted(result).build();
 	}
 
 
