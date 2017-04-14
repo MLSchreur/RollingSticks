@@ -83,5 +83,9 @@ public class Gebruiker {
 		}
 		
 	}
+	
+	public String getWachtwoord(){
+		return wachtwoord;
+	}
 
 }
