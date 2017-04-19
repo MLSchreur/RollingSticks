@@ -55,7 +55,7 @@ public class GebruikerService {
 
 	/**
 	 * Controle of gebruikersnaam bestaat
-	 * @param validateGebruiker
+	 * @param validateGebruiker De te valideren gebruiker
 	 * @return 	0   = gebruikersnaam bestaat niet
 	 * 			1 	= gebruiker is docent
 	 * 			2	= gebruiker is leerling

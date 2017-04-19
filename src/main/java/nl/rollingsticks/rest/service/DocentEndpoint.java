@@ -37,7 +37,7 @@ public class DocentEndpoint {
 	
 	/**
 	 * Aanmaken van nieuwe docent
-	 * @param	leerling Cre&euml;ren van een nieuwe Leerling.
+	 * @param	docent Cre&euml;ren van een nieuwe Docent.
 	 * @return 	Code 202 (Accepted)<br>
 	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
 	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>

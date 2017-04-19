@@ -132,7 +132,7 @@ public class LeerlingEndpoint {
 	/**
 	 * Verwijderen van koppeling tussen Groep(id) met Leerling (id).
 	 * @param 	id 					Id van de Leerling waar een Groep van verwijderd moet worden.
-	 * @param	huiswerkopdrachtId	Groep die verwijderd moet worden van Leerling (id).
+	 * @param	groepId				Groep die verwijderd moet worden van Leerling (id).
 	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
 	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
 	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>
@@ -155,7 +155,7 @@ public class LeerlingEndpoint {
 	/**
 	 * Aanmaken van koppeling tussen Groep(id) met Leerling (id).
 	 * @param 	id 					Id van de Leerling waar een Groep aan toegevoegd moet worden.
-	 * @param	huiswerkopdrachtId	Groep die toegevoegd moet worden aan Leerling (id).
+	 * @param	groepId				Groep die toegevoegd moet worden aan Leerling (id).
 	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
 	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
 	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>

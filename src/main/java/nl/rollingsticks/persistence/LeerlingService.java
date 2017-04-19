@@ -36,15 +36,15 @@ public class LeerlingService {
 		leerlingRepository.delete(id);
 	}
 	
-	/**
-	 * 
-	 * @param leerling Leerling van de Drumschool
-	 * @return de nieuwe id of ander <ul>
-	 * <li>-1 als de leerling een id heeft</li>
-	 * <li>-2 als leerling achternaam/voornaam of gebruikersnaam is null</li>
-	 * <li>-3 als gebruikersnaam al bestaat</li>
-	 * </ul>
-	 */
+//	/**
+//	 * 
+//	 * @param leerling Leerling van de Drumschool
+//	 * @return de nieuwe id of ander <ul>
+//	 * <li>-1 als de leerling een id heeft</li>
+//	 * <li>-2 als leerling achternaam/voornaam of gebruikersnaam is null</li>
+//	 * <li>-3 als gebruikersnaam al bestaat</li>
+//	 * </ul>
+//	 */
 //	public long newLeerling(Leerling leerling){
 //		if (leerling.getId() != 0){
 //			return -1;
@@ -84,9 +84,9 @@ public class LeerlingService {
 	}
 	
 	/**
-	 * Verwijderen van koppeling tussen Groep(id) met Leerling (id).
+	 * Verwijderen van koppeling tussen Groep(groepId) met Leerling (id).
 	 * @param 	id 					Id van de Leerling waar een Groep van verwijderd moet worden.
-	 * @param	huiswerkopdrachtId	Groep die verwijderd moet worden van Leerling (id).
+	 * @param	groepId				Groep die verwijderd moet worden van Leerling (id).
 	 * @return 	0 = Leerling en Groep zijn gekoppeld<br>
 	 * 		 	1 = Leerling met opgegeven id bestaat niet.<br>
 	 * 		 	2 = Groep met opgegeven id bestaat niet.<br>

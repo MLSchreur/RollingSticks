@@ -30,7 +30,7 @@ public class LoginEndpoint {
 
 	/**
 	 * Controleren van gebruikersnaam en wachtwoord bij inloggen
-	 * @param	gebruikerValidatie	Een JSON-object van type Gebruiker(Leerling of Docent) waarin gebruikersnaam en wachtwoord moeten worden meegegeven
+	 * @param	gebruiker	Een JSON-object van type Gebruiker(Leerling of Docent) waarin gebruikersnaam en wachtwoord moeten worden meegegeven
 	 * @return 	Code 200 (OK) - id = D staat voor Docent en L voor Leerling gevolgd door id van de gebruiker<br>
 	 * 			Code 406 (Not Acceptable) - 1 = Object is null
 	 * 			Code 406 (Not Acceptable) - 2 = gebruiker bestaat niet
