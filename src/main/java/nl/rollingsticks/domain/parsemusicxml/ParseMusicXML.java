@@ -295,22 +295,22 @@ public class ParseMusicXML {
 		instrumenten.add(new Instrument("c6"));
 		instrumenten.add(new Instrument("b5"));
 		instrumenten.add(new Instrument("a5", "Crash Cymbal"));				// Crash Bekken
-		instrumenten.add(new Instrument("g5", "Ride%g Bell"));				// Hihat Voet ??
+		instrumenten.add(new Instrument("a5", "Crash Cymbal 2"));			// Crash Bekken
 		instrumenten.add(new Instrument("g5", "Hi-Hat%g Open"));			// Hihat Open
 		instrumenten.add(new Instrument("g5", "Hi-Hat%g Closed"));			// Hihat
 		instrumenten.add(new Instrument("f5", "Ride Cymbal"));				// Ride Bekken
-		instrumenten.add(new Instrument("e5", "High Tom"));					// Kleine Tom ??
+		instrumenten.add(new Instrument("e5", "High Tom"));					// Kleine Tom
 		instrumenten.add(new Instrument("d5", "Low Tom"));					// Grote Tom
 		instrumenten.add(new Instrument("c5", "Snare Drum"));				// Snare Drum
 		instrumenten.add(new Instrument("c5", "Snare%g Ghost Stroke"));		// Ghost Noot
-		instrumenten.add(new Instrument("c5", "Stick Click"));				// Rim
+		instrumenten.add(new Instrument("c5", "Snare%g Rim"));				// Rim
 		instrumenten.add(new Instrument("b4"));
 		instrumenten.add(new Instrument("a4"));
 		instrumenten.add(new Instrument("g4"));
 		instrumenten.add(new Instrument("f4", "Floor Tom 1"));				// Staande Tom
 		instrumenten.add(new Instrument("e4", "Bass Drum"));				// Base Drum
-		instrumenten.add(new Instrument("d4", "Hi-Hat@g Foot"));			// Hihat Voet ??
-																			// EZdrummer  ??
+		instrumenten.add(new Instrument("d4", "Hi-Hat@g Foot"));			// Hihat Voet
+																			// EZdrummer, bestaat niet, waarschijnlijk verzamelnaam
 	}
 	
 	private void vastleggenInstrumentenIndex (String instrumentIndexId, String instrumentIndexNaam) {
