@@ -309,7 +309,7 @@ public class ParseMusicXML {
 		instrumenten.add(new Instrument("g4"));
 		instrumenten.add(new Instrument("f4", "Floor Tom 1"));				// Staande Tom
 		instrumenten.add(new Instrument("e4", "Bass Drum"));				// Base Drum
-		instrumenten.add(new Instrument("d4", "Hi-Hat@g Foot"));			// Hihat Voet
+		instrumenten.add(new Instrument("d4", "Hi-Hat%g Foot"));			// Hihat Voet
 																			// EZdrummer, bestaat niet, waarschijnlijk verzamelnaam
 	}
 	
