@@ -230,7 +230,7 @@ public class ParseMusicXML {
 							// e.printStackTrace();
 							System.out.println(e);;
 						}
-						Instrument instrument = new Instrument("", "Rest");
+						Instrument instrument = new Instrument("Rest", "Rest");
 						noot.setInstrumentEnNootNaam(instrument);
 						isRest = false;
 						isDuration = false;
