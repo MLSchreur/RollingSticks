@@ -57,6 +57,10 @@ public class ParseMusicXML {
 				boolean isBeam = 					false;
 				boolean isChord = 					false;
 				boolean isInstrument = 				false;
+				
+				// rustnoot + informatie
+				boolean isRest = 					false;
+				boolean isDuration = 				false;
 
 				@Override
 				public void startElement(String uri, String localName, String qName,
@@ -83,6 +87,9 @@ public class ParseMusicXML {
 					
 					case "score-instrument":	isInstrumentIndexId = true; break;
 					case "instrument-name":		isInstrumentIndexNaam = true; break;
+
+					case "rest":				isRest = true; break;
+					case "duration":			if(isRest) isDuration = true; break;		// alleen als er een <rest> tag is gevonden mag er naar de duration gekeken worden.
 					}
 					
 					// score-instrument = index van de instrumten
@@ -211,6 +218,22 @@ public class ParseMusicXML {
 					if (isChord) {
 						noot.setChord(true);
 						isChord = false;
+					}
+
+					// Rest en Duration (bij restnoot bepaalt de duration de lengte van de noot, in alle andere gevallen de tag <type>
+					if (isRest && isDuration) {
+						try {
+							int lengthRest = Integer.parseInt(new String(ch, start, length));
+							noot.setLength(lengthRest);
+						} catch (NumberFormatException e) {
+							noot.setLength(0);
+							// e.printStackTrace();
+							System.out.println(e);;
+						}
+						Instrument instrument = new Instrument("", "Rest");
+						noot.setInstrumentEnNootNaam(instrument);
+						isRest = false;
+						isDuration = false;
 					}
 				}
 
